@@ -10,7 +10,7 @@ function UploadDnd() {
   const setImageUrl=useImage((state:any)=>state.setImageUrl)
 
   const options = {
-    apiKey: process.env.NEXT_PUBLIC_BYTESCALE_API_KEY,
+    apiKey: process.env.NEXT_PUBLIC_BYTESCALE_API_KEY ?? "public_W142iQNC3Lrmk7AWk9nMECi2SFJY",
     editor: {
       images: {
         crop: false,
@@ -22,10 +22,19 @@ function UploadDnd() {
   function onUpdate({ uploadedFiles }: any) {
     if (uploadedFiles.length !== 0) {
       const imageUrl = uploadedFiles[0].fileUrl;
+      // Check file type
+      const fileExtension = imageUrl.split('.').pop().toLowerCase();
+      if (!['jpeg', 'jpg', 'png'].includes(fileExtension)) {
+        // Display error message
+        alert('Invalid file type. Please select a JPEG or PNG image.');
+        return;
+      }
+  
       setPreview(imageUrl);
       setImageUrl(imageUrl);
     }
   }
+  
 
   return preview ? (
     <div className="relative max-w-[500px] max-h-[300px] flex items-center justify-center">
