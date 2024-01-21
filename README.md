@@ -1,9 +1,7 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## ScreeShots
-![Screenshot 2023-12-03 121526](https://github.com/prashik0202/RoomGPT_Clone_using_NEXTJS_TailwindCss/assets/88095936/aaaf4e3c-308d-4960-8577-78c2e4da9278)
-
-![Screenshot 2023-12-03 121509](https://github.com/prashik0202/RoomGPT_Clone_using_NEXTJS_TailwindCss/assets/88095936/91ceec14-95da-44c2-8000-efea1930d971)
+![image](https://github.com/jodenrey/DesignGenius/assets/73212696/2c02725a-0ada-4263-b156-2da13fc17e56)
 
 
 
@@ -23,7 +21,6 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
