@@ -1,8 +1,8 @@
-//import Download from '@/components/Download'
+import Download from '@/components/Download'
 import GenerateBtn from '@/components/GenerateBtn'
-//import PreviewContent from '@/components/PreviewContent'
-//import SelectInp from '@/components/SelectInp'
-//import ThemeOptions from '@/components/ThemeOptions'
+import PreviewContent from '@/components/PreviewContent'
+import SelectInp from '@/components/SelectInp'
+import ThemeOptions from '@/components/ThemeOptions'
 import UploadDnd from '@/components/UploadDnd'
 import React from 'react'
 
@@ -16,7 +16,16 @@ const page = () => {
             {/* Upload Component */}
             <UploadDnd />
           </div>
-          
+          <div className="flex flex-col items-center gap-5 w-full">
+            <h3 className="font-bold text-white text-xl">Select Room Type</h3>
+            {/* Select Component */}
+            <SelectInp />
+          </div>
+          <div className="flex flex-col items-center gap-5 w-full">
+            <h3 className="font-bold text-white text-xl">Select Room Theme</h3>
+            {/* Theme Option Component */}
+            <ThemeOptions />
+          </div>
           {/* Generate Button Components */}
           <GenerateBtn />
         </div>
@@ -28,10 +37,11 @@ const page = () => {
             <p className='text-slate-400 text-xl'>Upload a room, specify the room type, and select your theme to design</p>
           </div>
           <div className='mt-5'>
-           
+            <Download />
           </div>
           {/* Preview Component */}
-         
+          <PreviewContent />
+          
         </div>
       </div>
     </div>
