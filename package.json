@@ -11,10 +11,10 @@
   "dependencies": {
     "@bytescale/upload-widget-react": "^4.13.0",
     "@clerk/nextjs": "^4.27.2",
-    "next": "14.0.3",
-    "react": "^18",
+    "next": "^14.2.3",
+    "react": "^18.3.1",
     "react-compare-slider": "^3.0.1",
-    "react-dom": "^18",
+    "react-dom": "^18.3.1",
     "react-select": "^5.8.0",
     "react-use-downloader": "^1.2.4",
     "replicate": "^0.22.0",
@@ -27,7 +27,7 @@
     "@wdio/mocha-framework": "^8.28.8",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
-    "eslint-config-next": "14.0.3",
+    "eslint-config-next": "^14.2.3",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"

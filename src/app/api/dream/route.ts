@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   
 
   const output = await replicate.run(
-    "alaradirik/t2i-adapter-sdxl-depth-midas:3263801326d7bf368327b89980371f634086e6bbbf734d9a2943cb516dd8209d",
+    "adirik/t2i-adapter-sdxl-depth-midas:8a89b0ab59a050244a751b6475d91041a8582ba33692ae6fab65e0c51b700328",
     {
       input: {
         image: imageUrl,
