@@ -7,7 +7,7 @@ import { headers } from "next/headers";
 
 export async function POST(request: Request) {
   // Rate Limiter Code
- 
+
 
   const { imageUrl, theme, room } = await request.json();
 
