@@ -1,14 +1,21 @@
 'use client'
-"use client"
 import React from 'react'
-import { ReactCompareSlider,ReactCompareSliderImage } from 'react-compare-slider'
+import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider'
 
 function CompareSlider() {
   return (
-    <ReactCompareSlider 
-    itemOne={<ReactCompareSliderImage src='/input.jpg'/>}
-    itemTwo={<ReactCompareSliderImage src='/output.png'/>}    
-    />
+    <div style={{ 
+      width: '100%', 
+      height: '500px', 
+      borderRadius: '20px', // Adjust the value to your preference
+      overflow: 'hidden' 
+    }}>
+      <ReactCompareSlider 
+        itemOne={<ReactCompareSliderImage src='/1.png' alt="Before" />}
+        itemTwo={<ReactCompareSliderImage src='/2.jpg' alt="After" />}    
+        style={{ width: '100%', height: '100%' }}
+      />
+    </div>
   )
 }
 

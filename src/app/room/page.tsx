@@ -8,11 +8,12 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div className='container mx-auto py-10 '>
+    <div className='min-h-screen container mx-auto py-10 '>
       <div className="w-full flex flex-col md:flex-row items-center md:items-stretch gap-20 px-10">
         <div className="flex flex-col items-center gap-8 md:w-1/3">
           <div className="flex flex-col items-center gap-5 w-full">
-            <h3 className="font-bold text-white text-xl">Upload a photo of your room</h3>
+            <h3 className="font-bold text-white text-xl">UPLOAD A PHOTO OF YOUR ROOM</h3>
+            <p className= "text-white text-slate-400 text-lg text-center"> Submit a JPEG or PNG photo that captures only a room for the best results.   </p>
             {/* Upload Component */}
             <UploadDnd />
           </div>
