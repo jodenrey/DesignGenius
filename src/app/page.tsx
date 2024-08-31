@@ -7,6 +7,7 @@ export default function Home() {
       className="min-h-screen flex gap-10 p-11 lg:flex-row flex-col justify-center lg:justify-around items-center"
     
     >
+      
       <div className="flex relative max-w-xl flex-col items-center gap-5">
         <h1 className="text-black text-5xl font-bold text-center">
           REDESIGNS ROOM IN SECONDS USING{" "}

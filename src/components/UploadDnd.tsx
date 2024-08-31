@@ -3,21 +3,37 @@ import React, { useState } from "react";
 import { UploadDropzone } from "@bytescale/upload-widget-react";
 import Image from "next/image";
 import { useImage } from "@/store/useStore";
+import { UploadWidgetConfig } from "@bytescale/upload-widget";
 
 function UploadDnd() {
   const [preview, setPreview] = useState<string>();
   const [loading, setLoading] = useState<boolean>(true);
   const setImageUrl=useImage((state:any)=>state.setImageUrl)
 
-  const options = {
-    apiKey: process.env.NEXT_PUBLIC_BYTESCALE_API_KEY ?? "public_W142iQNC3Lrmk7AWk9nMECi2SFJY",
-    editor: {
-      images: {
-        crop: false,
+  const options: UploadWidgetConfig = {
+    apiKey: !!process.env.NEXT_PUBLIC_UPLOAD_API_KEY
+        ? process.env.NEXT_PUBLIC_UPLOAD_API_KEY
+        : "free",
+    maxFileCount: 1,
+    mimeTypes: ["image/jpeg", "image/png", "image/jpg"],
+    editor: { images: { crop: false } },
+    styles: {
+      colors: {
+        primary: "#2563EB", // Primary buttons & links
+        error: "#d23f4d", // Error messages
+        shade100: "#fff", // Standard text
+        shade200: "#fffe", // Secondary button text
+        shade300: "#fffd", // Secondary button text (hover)
+        shade400: "#fffc", // Welcome text
+        shade500: "#fff9", // Modal close button
+        shade600: "#fff7", // Border
+        shade700: "#fff2", // Progress indicator background
+        shade800: "#fff1", // File item background
+        shade900: "#ffff", // Various (draggable crop buttons, etc.)
       },
     },
-    maxFileCount: 1,
   };
+  
 
   function onUpdate({ uploadedFiles }: any) {
     if (uploadedFiles.length !== 0) {
