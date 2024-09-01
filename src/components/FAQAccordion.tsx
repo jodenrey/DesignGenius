@@ -14,27 +14,27 @@ const FAQAccordion = () => {
   const faqs = [
     {
       question: 'What is DesignGenius?',
-      answer: 'DesignGenius is a platform that offers a wide range of design resources and tools to help designers bring their ideas to life.',
+      answer: 'DesignGenius is an innovative web-based platform that serves as an AI-powered interior design partner, leveraging the capabilities of generative design. DesignGenius revolves around revolutionizing the interior design process by integrating artificial intelligence into the creative aspects. This platform acts as a virtual design assistant, providing users with intelligent and creative suggestions for their interior spaces',
     },
     {
       question: 'How do I get started?',
-      answer: 'To get started, simply sign up for an account, explore our resources, and start designing. We offer tutorials and guides to help you every step of the way.',
+      answer: 'To get started, simply login or sign up for an account, and upload your room photo and wait for our AI to generate your dream room.',
     },
     {
-      question: 'What resources are available?',
-      answer: 'We offer a variety of resources including templates, tutorials, design tools, and a community forum to help you improve your design skills.',
+      question: 'What will you do with my photos?',
+      answer: 'Absolutely nothing, the images you upload and the images that are generated from our AI',
     },
     {
-        question: 'What resources are available?',
-        answer: 'We offer a variety of resources including templates, tutorials, design tools, and a community forum to help you improve your design skills.',
+        question: 'How much will the AI Interior design look like my current interior?',
+        answer: 'The resemblance depends on the quality of photo you upload. The better your photos, the more accurately the AI can understand and represent your unique characteristics.',
       },
       {
-        question: 'What resources are available?',
-        answer: 'We offer a variety of resources including templates, tutorials, design tools, and a community forum to help you improve your design skills.',
+        question: 'Is DesignGenius for everyone?',
+        answer: 'DesignGenius is built for interior designers, architects, and professionals in the property and real estate sector. However, everyone can easily use DesignGenius.',
       },
       {
-        question: 'What resources are available?',
-        answer: 'We offer a variety of resources including templates, tutorials, design tools, and a community forum to help you improve your design skills.',
+        question: 'Why can’t I upload the image?',
+        answer: 'Make sure it is JPG and PNG file type only.',
       },    
   ];
 
@@ -43,7 +43,7 @@ const FAQAccordion = () => {
       {faqs.map((faq, index) => (
         <div
           key={index}
-          className={`border-b border-gray-300 py-6 cursor-pointer transition-colors duration-300 ease-in-out ${activeIndex === index ? 'bg-gray-200' : 'hover:bg-orange-200'}`}
+          className={`border-b border-gray-300 py-6 cursor-pointer transition-colors duration-300 ease-in-out ${activeIndex === index ? 'bg-gray-200' : 'hover:bg-orange-100'}`}
           onClick={() => toggleAccordion(index)}
         >
           <div className="flex justify-between items-center">

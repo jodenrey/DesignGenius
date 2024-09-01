@@ -12,7 +12,7 @@ const UserInf = () => {
       Login
     </Link>
   ): (
-    <UserButton />
+    <UserButton afterSignOutUrl='/sign-in'/>
   )
 }
 

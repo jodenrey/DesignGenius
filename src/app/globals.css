@@ -23,6 +23,21 @@
   inset: 0;
   pointer-events: none;
 }
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #C87616; /* Custom color */
+  border-radius: 6px;
+  border: 3px solid #f1f1f1;
+}
+
 @media screen and (max-width : 1100px) {
   .gradiant-bg::before{
       transform: scale(1);
