@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import React from 'react';
-import logo from "@/assets/logo.svg";
+import logo from "@/assets/white.svg";
 import { useLoading, useOutput, useImage } from '@/store/useStore';
 import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider';
 

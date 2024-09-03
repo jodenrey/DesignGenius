@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="2286" height="2286" viewBox="0 0 2286 2286">
+  <defs>
+    <style>
+      .cls-1 {
+        filter: url(#filter);
+      }
+
+      .cls-2, .cls-3 {
+        stroke: #000;
+        stroke-width: 20px;
+        fill-rule: evenodd;
+      }
+
+      .cls-3 {
+        fill: none;
+      }
+    </style>
+    <filter id="filter" filterUnits="userSpaceOnUse">
+      <feFlood result="flood" flood-color="#fff"/>
+      <feComposite result="composite" operator="in" in2="SourceGraphic"/>
+      <feBlend result="blend" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g class="cls-1">
+    <path id="Rectangle_2_copy" data-name="Rectangle 2 copy" class="cls-2" d="M145.992,977.976L1432.98,100.128,1499,197,145.992,1113.98v-136ZM491,743l-1-226H734v60M455.047,457H769.953L770,517l-315,1ZM1334,297l790,720,2.2,150.54L1237,363Z"/>
+    <path class="cls-2" d="M749,521"/>
+    <path class="cls-3" d="M824,744"/>
+    <path id="D" class="cls-2" d="M739.135,1759.35H556.754V1154.7H739.135l91.347,75.68v453.29ZM282,1017.71l1.026,741.64H282.2v226.52H921.516l182.384-151.1V1079.28L921.516,927.919,417,927.591"/>
+    <path id="G" class="cls-2" d="M1345.3,2005.47h526.87l175.62-153.83V1390.13h-439.2v230.89h175.92v76.78l-87.96,77.05H1520.93l-87.97-77.05V1236.3l87.97-77.05h175.62l87.96,77.05v76.78h263.28V1082.46l-175.62-154.1H1345.3l-175.62,154.1v769.18Z"/>
+  </g>
+</svg>
