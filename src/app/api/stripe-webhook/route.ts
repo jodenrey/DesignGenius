@@ -7,22 +7,24 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
 });
 
-// No need for export const config here, it's no longer needed in Next.js App Router
+// No longer using the config export as it's deprecated for Next.js App Router
 
 export async function POST(req: Request) {
   const sig = req.headers.get('stripe-signature');
 
   try {
-    // Convert Request to a ReadableStream for raw-body to process
-    const readable = req.body as unknown as NodeJS.ReadableStream;
-    
-    // Get the raw body as a buffer
-    const rawBody = await getRawBody(readable);
+    // Check if the request body is a ReadableStream
+    const bodyBuffer = await getRawBody(req.body as any, {
+      length: req.headers.get('content-length')!,
+      limit: '1mb', // Set a reasonable limit for the body size
+      encoding: 'utf8', // Set the encoding explicitly
+    });
 
     let event: Stripe.Event;
 
     try {
-      event = stripe.webhooks.constructEvent(rawBody, sig!, process.env.STRIPE_WEBHOOK_SECRET!);
+      // Verify Stripe signature and parse event
+      event = stripe.webhooks.constructEvent(bodyBuffer, sig!, process.env.STRIPE_WEBHOOK_SECRET!);
     } catch (err) {
       if (err instanceof Error) {
         console.error(`Webhook Error: ${err.message}`);
@@ -60,7 +62,6 @@ export async function POST(req: Request) {
     }
 
     return new NextResponse('Success', { status: 200 });
-
   } catch (err) {
     console.error('Error processing webhook:', err);
     return new NextResponse('Webhook Error: Unable to read request body', { status: 500 });
