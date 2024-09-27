@@ -1,13 +1,13 @@
 import { prisma } from '@/lib/prisma';
 import Stripe from 'stripe';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
 });
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const rawBody = await request.text();
   const signature = headers().get('stripe-signature');
 
@@ -56,6 +56,20 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json({ received: true });
+}
+
+export async function GET() {
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
+}
+
+export function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Methods': 'POST',
+      'Access-Control-Allow-Headers': 'Content-Type, stripe-signature',
+    },
+  });
 }
 
 export const runtime = 'edge';
