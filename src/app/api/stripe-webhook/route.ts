@@ -1,41 +1,58 @@
 import { prisma } from '@/lib/prisma';
 import Stripe from 'stripe';
 import { NextResponse } from 'next/server';
-import getRawBody from 'raw-body';
 
+// Initialize Stripe client
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
 });
 
-// No longer using the config export as it's deprecated for Next.js App Router
+// Disable body parsing for this API route
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+// Helper function to buffer the request body
+async function buffer(readable: ReadableStream<Uint8Array>) {
+  const reader = readable.getReader();
+  const chunks = [];
+  let done = false;
+
+  while (!done) {
+    const { done: readerDone, value } = await reader.read();
+    if (readerDone) {
+      done = true;
+    } else {
+      chunks.push(value);
+    }
+  }
+  return Buffer.concat(chunks);
+}
 
 export async function POST(req: Request) {
   const sig = req.headers.get('stripe-signature');
 
   try {
-    // Check if the request body is a ReadableStream
-    const bodyBuffer = await getRawBody(req.body as any, {
-      length: req.headers.get('content-length')!,
-      limit: '1mb', // Set a reasonable limit for the body size
-      encoding: 'utf8', // Set the encoding explicitly
-    });
+    // Read the raw body from the readable stream
+    const rawBody = await buffer(req.body as unknown as ReadableStream<Uint8Array>);
 
     let event: Stripe.Event;
 
     try {
-      // Verify Stripe signature and parse event
-      event = stripe.webhooks.constructEvent(bodyBuffer, sig!, process.env.STRIPE_WEBHOOK_SECRET!);
-    } catch (err) {
+      // Verify Stripe signature and construct event
+      event = stripe.webhooks.constructEvent(rawBody, sig!, process.env.STRIPE_WEBHOOK_SECRET!);
+    } catch (err: unknown) {
       if (err instanceof Error) {
-        console.error(`Webhook Error: ${err.message}`);
-        return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
-      } else {
-        console.error('Unknown error occurred during Stripe webhook processing');
-        return new NextResponse('Webhook Error: Unknown error occurred', { status: 400 });
+        console.error(`Webhook signature verification failed: ${err.message}`);
+        return new NextResponse(`Webhook signature verification failed: ${err.message}`, { status: 400 });
       }
+      console.error('Unknown error occurred during webhook processing');
+      return new NextResponse('Webhook Error: Unknown error occurred', { status: 400 });
     }
 
-    // Process the event
+    // Process the Stripe event
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session;
       const userEmail = session.customer_email;
@@ -62,8 +79,8 @@ export async function POST(req: Request) {
     }
 
     return new NextResponse('Success', { status: 200 });
-  } catch (err) {
-    console.error('Error processing webhook:', err);
-    return new NextResponse('Webhook Error: Unable to read request body', { status: 500 });
+  } catch (err: unknown) {
+    console.error('Error handling Stripe webhook:', err);
+    return new NextResponse('Error processing webhook', { status: 500 });
   }
 }
