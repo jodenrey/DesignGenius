@@ -1,18 +1,18 @@
 'use client'
 import React from 'react'
-import Link from 'next/link'
-import { useUser, UserButton } from '@clerk/nextjs'
+import { useUser, UserButton, SignInButton } from '@clerk/nextjs'
 
 const UserInf = () => {
+  const { isSignedIn, user } = useUser();
 
-  const { user } = useUser();
-
-  return !user ? (
-    <Link href={"/room"} className='bg-black hover:opacity-90 px-10 py-3 rounded-lg text-white font-semibold'>
-      Login
-    </Link>
-  ): (
-    <UserButton afterSignOutUrl='/sign-in'/>
+  return !isSignedIn ? (
+    <SignInButton mode="modal">
+      <button className="bg-black hover:opacity-90 px-10 py-3 rounded-lg text-white font-semibold">
+        Login
+      </button>
+    </SignInButton>
+  ) : (
+    <UserButton afterSignOutUrl='/'/>
   )
 }
 

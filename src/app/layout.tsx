@@ -7,6 +7,7 @@ import logo from '@/assets/white.svg';
 import { ClerkProvider } from '@clerk/nextjs';
 import UserInf from '@/components/UserInf';
 import { useState } from 'react';
+import InitializeUser from '@/components/InitializeUser';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({
 
   return (
     <ClerkProvider>
+         <InitializeUser />
       <html lang="en">
         <body
           className={inter.className}
@@ -115,6 +117,12 @@ export default function RootLayout({
 
               {/* Standard header for medium and larger screens */}
               <div className="hidden md:flex items-center gap-8">
+              <Link
+                  href="/pricing"
+                  className="text-white md:text-xl text-lg font-medium border-b-2 border-transparent hover:border-white"
+                >
+                  Pricing
+                </Link>
                 <Link
                   href="/faq"
                   className="text-white md:text-xl text-lg font-medium border-b-2 border-transparent hover:border-white"
