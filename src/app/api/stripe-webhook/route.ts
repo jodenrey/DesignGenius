@@ -7,13 +7,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
 });
 
-// Disable body parsing for this API route
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 // Helper function to buffer the request body
 async function buffer(readable: ReadableStream<Uint8Array>) {
   const reader = readable.getReader();
