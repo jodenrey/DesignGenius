@@ -54,8 +54,5 @@ export async function POST(request: Request) {
   return NextResponse.json({ received: true });
 }
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// This replaces the previous config export
+export const runtime = 'edge';
