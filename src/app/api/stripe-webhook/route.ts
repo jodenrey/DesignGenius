@@ -7,12 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
 });
 
-// Disable Next.js body parsing to handle raw body correctly
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// No need for export const config here, it's no longer needed in Next.js App Router
 
 export async function POST(req: Request) {
   const sig = req.headers.get('stripe-signature');
