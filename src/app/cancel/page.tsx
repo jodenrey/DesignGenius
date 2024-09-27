@@ -15,7 +15,7 @@ const SuccessPage = () => {
       if (!session_id) return;
 
       try {
-        const res = await fetch(`/api/update-credits`, {
+        const res = await fetch(`/api/update-credit`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
