@@ -8,16 +8,20 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export async function POST(request: Request) {
-  const body = await request.text();
-  const signature = headers().get('stripe-signature') as string;
+  const rawBody = await request.text();
+  const signature = headers().get('stripe-signature');
+
+  if (!signature) {
+    return NextResponse.json({ error: 'No signature found' }, { status: 400 });
+  }
 
   let event: Stripe.Event;
 
   try {
     event = await stripe.webhooks.constructEventAsync(
-      body,
+      rawBody,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      process.env.STRIPE_WEBHOOK_SECRET!.trim()
     );
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
