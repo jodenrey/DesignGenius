@@ -6,12 +6,35 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
 });
 
-// Create a middleware to capture raw body
+// Disable the body parser to allow raw body handling
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+// Helper function to read the raw body from the request stream
+async function readRawBody(req: Request): Promise<string> {
+  const readable = req.body as unknown as ReadableStream;
+  const reader = readable.getReader();
+  const chunks = [];
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+  }
+
+  const bodyBuffer = Buffer.concat(chunks);
+  return bodyBuffer.toString();
+}
+
+// Webhook handler
 export async function POST(req: Request) {
   const sig = req.headers.get('stripe-signature');
 
   // Get the raw body as text
-  const rawBody = await req.text();
+  const rawBody = await readRawBody(req);
 
   let event: Stripe.Event;
 
