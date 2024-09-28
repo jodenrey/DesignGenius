@@ -6,12 +6,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
 });
 
-// Disable the body parser to allow raw body handling for Stripe verification
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// Set up the route to allow for raw body handling
+export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
 
 // Helper function to read raw body as Buffer
 async function readRawBody(req: Request): Promise<Buffer> {
