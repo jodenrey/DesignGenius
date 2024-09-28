@@ -58,7 +58,7 @@ const SuccessPage = () => {
               </p>
               <button
                 className="px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition duration-300"
-                onClick={() => window.location.href = '/pricing'}
+                onClick={() => window.location.href = '/room'}
               >
                 Redesign your room!
               </button>
