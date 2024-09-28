@@ -6,39 +6,43 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
 });
 
-// Disable the body parser to allow raw body handling
+// Disable the body parser to allow raw body handling for Stripe verification
 export const config = {
   api: {
     bodyParser: false,
   },
 };
 
-// Helper function to read the raw body from the request stream
-async function readRawBody(req: Request): Promise<string> {
-  const readable = req.body as unknown as ReadableStream;
+// Helper function to read raw body as Buffer
+async function readRawBody(req: Request): Promise<Buffer> {
+  const readable = req.body as unknown as ReadableStream<Uint8Array>;
   const reader = readable.getReader();
-  const chunks = [];
+  const chunks: Uint8Array[] = [];
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    chunks.push(value);
+  let done = false;
+  while (!done) {
+    const { value, done: readerDone } = await reader.read();
+    if (readerDone) {
+      done = true;
+    } else {
+      chunks.push(value);
+    }
   }
 
-  const bodyBuffer = Buffer.concat(chunks);
-  return bodyBuffer.toString();
+  return Buffer.concat(chunks.map((chunk) => Buffer.from(chunk)));
 }
 
 // Webhook handler
 export async function POST(req: Request) {
   const sig = req.headers.get('stripe-signature');
 
-  // Get the raw body as text
+  // Get the raw body as Buffer
   const rawBody = await readRawBody(req);
 
   let event: Stripe.Event;
 
   try {
+    // Verify and construct the Stripe event
     event = stripe.webhooks.constructEvent(rawBody, sig!, process.env.STRIPE_WEBHOOK_SECRET!);
   } catch (err) {
     if (err instanceof Error) {
