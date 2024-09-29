@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import joseph from '@/assets/joseph.png'
-import johndoe from '@/assets/johndoe.png'
+import joseph from '@/assets/joseph.png';
+import johndoe from '@/assets/johndoe.png';
 
 const AboutPage = () => {
   return (
@@ -12,7 +12,7 @@ const AboutPage = () => {
             <p className="text-xl text-[#C87616] mt-2 mb-8">
               DESIGNGENIUS: A WEB-BASED AI INTERIOR DESIGN PARTNER WITH GENERATIVE DESIGN
             </p>
-            
+
             <div className="flex justify-center gap-12 flex-wrap mt-8">
               {/* Team members */}
               <div className="text-center w-44">
@@ -62,7 +62,7 @@ const AboutPage = () => {
             </div>
 
             <p className="text-lg leading-7 my-5">
-              We are Bachelor of Science in Computer Science students from STI, and DesignGenius represents the culmination of our thesis work. DesignGenius is an AI-powered platform created to assist users in transforming their interior spaces with ease and efficiency. Our website offers a range of AI-driven design solutions, from personalized room layouts to 3D visualizations, catering to homeowners, interior designers, and enthusiasts alike. Through this project, we've combined our passion for technology and design to create a user-friendly tool that makes the design process more accessible and innovative.
+              We are Bachelor of Science in Computer Science students from STI, and DesignGenius represents the culmination of our thesis work. DesignGenius is an AI-powered platform created to assist users in transforming their interior spaces with ease and efficiency. Our website offers a range of AI-driven design solutions, from personalized room layouts to 3D visualizations, catering to homeowners, interior designers, and enthusiasts alike. Through this project, we&apos;ve combined our passion for technology and design to create a user-friendly tool that makes the design process more accessible and innovative.
             </p>
           </section>
 
