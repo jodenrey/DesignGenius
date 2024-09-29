@@ -5,28 +5,28 @@ import PreviewContent from '@/components/PreviewContent';
 import SelectInp from '@/components/SelectInp';
 import ThemeOptions from '@/components/ThemeOptions';
 import UploadDnd from '@/components/UploadDnd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 const Page = () => {
   const [credits, setCredits] = useState<number | null>(null);
 
-  useEffect(() => {
-    const fetchCredits = async () => {
-      try {
-        const response = await fetch('/api/get-credits'); // Replace with your API route
-        if (response.ok) {
-          const data = await response.json();
-          setCredits(data.credits); // Adjust based on your API response structure
-        } else {
-          console.error('Failed to fetch credits:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error fetching credits:', error);
+  const fetchCredits = useCallback(async () => {
+    try {
+      const response = await fetch('/api/get-credits');
+      if (response.ok) {
+        const data = await response.json();
+        setCredits(data.credits); // Update state with new credits
+      } else {
+        console.error('Failed to fetch credits:', response.statusText);
       }
-    };
-
-    fetchCredits();
+    } catch (error) {
+      console.error('Error fetching credits:', error);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchCredits(); // Fetch credits on component mount
+  }, [fetchCredits]);
 
   return (
     <div className='min-h-screen container mx-auto py-10 '>
@@ -57,7 +57,7 @@ const Page = () => {
             <ThemeOptions />
           </div>
           {/* Generate Button Components */}
-          <GenerateBtn />
+          <GenerateBtn onGenerateComplete={fetchCredits} /> {/* Pass fetchCredits */}
         </div>
         <div className='md:w-2/3 flex flex-col items-center pb-10'>
           <div className='md:flex hidden flex-col gap-5 text-center'>

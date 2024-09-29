@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import SubscriptionPopup from './SubscriptionPopup';
 
-const GenerateBtn = () => {
+const GenerateBtn = ({ onGenerateComplete }: { onGenerateComplete: () => void }) => {
   const imageUrl = useImage((state: any) => state.imageUrl);
   const theme = useTheme((state: any) => state.theme);
   const room = useRoom((state: any) => state.room);
@@ -89,6 +89,9 @@ const GenerateBtn = () => {
         if (deductResponse.ok) {
           const updatedUser = await deductResponse.json();
           setUserCredits(updatedUser.credits); // Update user credits from the response
+
+          // Step 3: Call onGenerateComplete to notify the parent component
+          onGenerateComplete(); // Notify parent to refresh credits in real-time
         } else {
           console.error('Failed to deduct credits:', deductResponse.statusText);
         }
