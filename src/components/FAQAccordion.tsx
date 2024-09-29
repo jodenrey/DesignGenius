@@ -39,16 +39,16 @@ const FAQAccordion = () => {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto my-12">
+    <div className="max-w-full mx-auto my-12 text-white">
       {faqs.map((faq, index) => (
         <div
           key={index}
-          className={`border-b border-gray-300 py-6 cursor-pointer transition-colors duration-300 ease-in-out ${activeIndex === index ? 'bg-gray-200' : 'hover:bg-orange-100'}`}
+          className={`border-b border-gray-300 py-6 cursor-pointer transition-colors duration-300 ease-in-out `}
           onClick={() => toggleAccordion(index)}
         >
           <div className="flex justify-between items-center">
-            <h4 className="text-xl font-semibold text-gray-900">{faq.question}</h4>
-            <span className="text-gray-600 text-xl">
+            <h4 className="text-xl font-semibold">{faq.question}</h4>
+            <span className="text-xl">
               {activeIndex === index ? <FaChevronUp /> : <FaChevronDown />}
             </span>
           </div>
@@ -60,7 +60,7 @@ const FAQAccordion = () => {
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <p className="mt-4 text-gray-700 text-lg">{faq.answer}</p>
+                <p className="mt-4 text-lg">{faq.answer}</p>
               </motion.div>
             )}
           </AnimatePresence>

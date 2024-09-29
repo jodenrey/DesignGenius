@@ -3,26 +3,55 @@ import { useRoom } from '@/store/useStore';
 import React from 'react'
 import Select from 'react-select';
 
-
 const SelectInp = () => {
-
-  const setRoom=useRoom((state:any)=>state.setRoom);
-  function handleChange(e : any){
+  const setRoom = useRoom((state: any) => state.setRoom);
+  
+  function handleChange(e: any) {
     setRoom(e.value);
   }
 
   const options = [
-    { value: 'living room', label: 'Living Room'},
-    { value: 'bedroom', label: 'Bedroom'},
-    { value: 'bathroom', label: 'Bathroom'},
-    { value: 'kitchen', label: 'Kitchen'}
-  ]
+    { value: 'living room', label: 'Living Room' },
+    { value: 'bedroom', label: 'Bedroom' },
+    { value: 'bathroom', label: 'Bathroom' },
+    { value: 'kitchen', label: 'Kitchen' }
+  ];
+
+  const customStyles = {
+    control: (provided: any) => ({
+      ...provided,
+      backgroundColor: 'white',
+      color: 'black',
+    }),
+    menu: (provided: any) => ({
+      ...provided,
+      backgroundColor: 'white',
+    }),
+    option: (provided: any, state: { isSelected: any; }) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? '#3b82f6' : 'white',
+      color: state.isSelected ? 'white' : 'black',
+      '&:hover': {
+        backgroundColor: '#bfdbfe',
+        color: 'black',
+      },
+    }),
+    singleValue: (provided: any) => ({
+      ...provided,
+      color: 'black',
+    }),
+  };
 
   return (
     <div className='w-full'>
-      <Select onChange={handleChange} options={options} defaultValue={options[0]}/>
+      <Select 
+        onChange={handleChange} 
+        options={options} 
+        defaultValue={options[0]}
+        styles={customStyles}
+      />
     </div>
   )
 }
 
-export default SelectInp
+export default SelectInp;

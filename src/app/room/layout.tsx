@@ -9,7 +9,7 @@ export default function RootLayout({
 }) {
   return (
     
-      <div className={inter.className + ' bg-[#17181C]'}>
+      <div className={inter.className + ' '}>
       
         {children}
       </div>

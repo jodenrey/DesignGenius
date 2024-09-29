@@ -28,7 +28,7 @@ const Download = () => {
     <button 
       disabled={isGenerating && isLoading} 
       onClick={() => download(output, fileName(10) ) }
-      className='bg-blue-500 px-5 py-3 text-white rounded-lg'
+      className='bg-orange-500 px-5 py-3 text-white rounded-lg'
     >
       Download Image
     </button>

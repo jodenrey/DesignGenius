@@ -1,11 +1,14 @@
 'use client'
+import React, { useEffect, useState, useCallback } from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { ArrowRight, Upload, CreditCard, Home, Palette } from 'lucide-react';
 import Download from '@/components/Download';
 import GenerateBtn from '@/components/GenerateBtn';
 import PreviewContent from '@/components/PreviewContent';
 import SelectInp from '@/components/SelectInp';
 import ThemeOptions from '@/components/ThemeOptions';
 import UploadDnd from '@/components/UploadDnd';
-import React, { useEffect, useState, useCallback } from 'react';
 
 const Page = () => {
   const [credits, setCredits] = useState<number | null>(null);
@@ -15,7 +18,7 @@ const Page = () => {
       const response = await fetch('/api/get-credits');
       if (response.ok) {
         const data = await response.json();
-        setCredits(data.credits); // Update state with new credits
+        setCredits(data.credits);
       } else {
         console.error('Failed to fetch credits:', response.statusText);
       }
@@ -25,56 +28,95 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    fetchCredits(); // Fetch credits on component mount
+    fetchCredits();
   }, [fetchCredits]);
 
   return (
-    <div className='min-h-screen container mx-auto py-10 '>
-      <div className="w-full flex flex-col md:flex-row items-center md:items-stretch gap-20 px-10">
-        <div className="flex flex-col items-center gap-8 md:w-1/3">
-          <div className="flex flex-col items-center gap-5 w-full">
-            <h3 className="font-bold text-white text-xl">UPLOAD A PHOTO OF YOUR ROOM</h3>
-            <p className="text-white text-slate-400 text-lg text-center">
-              Submit a JPEG or PNG photo that captures only a room for the best results.
-            </p>
-            {/* Display User Credits */}
-            {credits !== null && (
-              <p className="text-white text-slate-400 text-lg text-center">
-                Your Credits: {credits}
+    <div className="min-h-screen bg-black text-white">
+      <div className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
+        <motion.h1 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-4xl sm:text-5xl lg:text-6xl font-bold text-center mb-8"
+        >
+          Redesign your <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-pink-600">room</span> in seconds
+        </motion.h1>
+        
+        <div className="flex flex-col lg:flex-row gap-12">
+          {/* Left Column */}
+          <div className="lg:w-1/3 space-y-8">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-white bg-opacity-10 rounded-xl p-6 shadow-lg"
+            >
+              <h3 className="font-bold text-xl mb-4 flex items-center">
+                <Upload className="mr-2" /> Upload a photo of your room
+              </h3>
+              <p className="text-gray-300 mb-4">
+                Submit a JPEG or PNG photo that captures only a room for the best results.
               </p>
-            )}
-            {/* Upload Component */}
-            <UploadDnd />
+              <UploadDnd />
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="bg-white bg-opacity-10 rounded-xl p-6 shadow-lg"
+            >
+              <h3 className="font-bold text-xl mb-4 flex items-center">
+                <Home className="mr-2" /> Select Room Type
+              </h3>
+              <SelectInp />
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+              className="bg-white bg-opacity-10 rounded-xl p-6 shadow-lg"
+            >
+              <h3 className="font-bold text-xl mb-4 flex items-center">
+                <Palette className="mr-2" /> Select Room Theme
+              </h3>
+              <ThemeOptions />
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              className="flex justify-between items-center bg-white bg-opacity-10 rounded-xl p-4 shadow-lg"
+            >
+              <div className="flex items-center">
+                <CreditCard className="mr-2" />
+                <span className="font-semibold">Your Credits:</span>
+              </div>
+              <span className="text-2xl font-bold text-orange-400">{credits ?? '...'}</span>
+            </motion.div>
+
+            <GenerateBtn onGenerateComplete={fetchCredits} />
           </div>
-          <div className="flex flex-col items-center gap-5 w-full">
-            <h3 className="font-bold text-white text-xl">Select Room Type</h3>
-            {/* Select Component */}
-            <SelectInp />
-          </div>
-          <div className="flex flex-col items-center gap-5 w-full">
-            <h3 className="font-bold text-white text-xl">Select Room Theme</h3>
-            {/* Theme Option Component */}
-            <ThemeOptions />
-          </div>
-          {/* Generate Button Components */}
-          <GenerateBtn onGenerateComplete={fetchCredits} /> {/* Pass fetchCredits */}
-        </div>
-        <div className='md:w-2/3 flex flex-col items-center pb-10'>
-          <div className='md:flex hidden flex-col gap-5 text-center'>
-            <h1 className='text-6xl text-white font-bold'>
-              Redesign your <span className='text-blue-500'>room</span> in seconds
-            </h1>
-            <p className='text-slate-400 text-xl'>
-              Upload a room, specify the room type, and select your theme to design
-            </p>
-          </div>
-          <div className='mt-5'>
-            <Download />
-          </div>
-          {/* Preview Component */}
-          <PreviewContent />
-          
-          {/* History Component */}
+
+          {/* Right Column */}
+          <div className="lg:w-2/3 items-center">
+  <motion.div 
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay: 1 }}
+    className="bg-white bg-opacity-10 rounded-xl p-6 shadow-lg flex flex-col items-center text-center"
+  >
+    <h2 className="text-2xl font-bold mb-4">Preview</h2>
+    <PreviewContent />
+    <div className="mt-4">
+      <Download />
+    </div>
+  </motion.div>
+</div>
+
         </div>
       </div>
     </div>

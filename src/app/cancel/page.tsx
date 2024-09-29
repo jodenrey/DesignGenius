@@ -2,79 +2,46 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { CheckCircleIcon } from '@heroicons/react/24/solid';
+import { XCircleIcon } from '@heroicons/react/24/solid';
 
-const SuccessPage = () => {
+const CancelPage = () => {
   const searchParams = useSearchParams();
-  const session_id = searchParams.get('session_id');
-  const [creditsUpdated, setCreditsUpdated] = useState(false);
+  const session_id = searchParams.get('session_id'); // Optional: If you want to log or perform any action with the session ID
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const updateUserCredits = async () => {
-      if (!session_id) return;
-
-      try {
-        const res = await fetch(`/api/update-credit`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ sessionId: session_id }),
-        });
-
-        if (res.ok) {
-          setCreditsUpdated(true);
-        } else {
-          console.error('Failed to update credits');
-        }
-      } catch (error) {
-        console.error('Error updating credits:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (session_id) {
-      updateUserCredits();
-    }
-  }, [session_id]);
+    // You can perform any necessary cleanup or logging here if required
+    setLoading(false);
+  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center">
       {loading ? (
         <div className="flex flex-col items-center">
-          <div className="spinner border-4 border-green-500 border-t-transparent rounded-full w-16 h-16 mb-4 animate-spin"></div>
-          <p className="text-white">Updating your credits, please wait...</p>
+          <div className="spinner border-4 border-red-500 border-t-transparent rounded-full w-16 h-16 mb-4 animate-spin"></div>
+          <p className="text-white">Canceling your payment, please wait...</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow-lg max-w-md text-center">
-          {creditsUpdated ? (
-            <>
-              <CheckCircleIcon className="h-16 w-16 text-green-500 mb-4" />
-              <h1 className="text-3xl font-bold mb-4 text-green-600">Payment Successful!</h1>
-              <p className="text-gray-600 mb-6">
-                Thank you for your payment. Your credits have been successfully updated!
-              </p>
-              <button
-                className="px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition duration-300"
-                onClick={() => window.location.href = '/room'}
-              >
-                Redesign your room!
-              </button>
-            </>
-          ) : (
-            <>
-              <h1 className="text-3xl font-bold mb-4 text-red-600">Payment Failed!</h1>
-              <p className="text-gray-600 mb-6">There was an issue updating your credits.</p>
-              <button
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-                onClick={() => window.location.href = '/pricing'}
-              >
-                Try Again
-              </button>
-            </>
-          )}
+        <div className="bg-white p-10 rounded-xl shadow-lg max-w-md text-center">
+          <XCircleIcon className="h-16 w-16 text-red-500 mx-auto mb-4" />
+          <h1 className="text-3xl font-bold mb-4 text-red-600">Payment Canceled!</h1>
+          <p className="text-gray-600 mb-6">
+            Your payment has been canceled. If you have questions, please contact support.
+          </p>
+          <div className="flex flex-col gap-4"> {/* Add gap between buttons */}
+  <button
+    className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300"
+    onClick={() => window.location.href = '/room'} // Redirect to redesign room or main page
+  >
+    Return to Room Design
+  </button>
+  <button
+    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300"
+    onClick={() => window.location.href = '/pricing'} // Redirect to pricing or retry payment
+  >
+    Try Again
+  </button>
+</div>
         </div>
       )}
     </div>
@@ -84,7 +51,7 @@ const SuccessPage = () => {
 export default function Page() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <SuccessPage />
+      <CancelPage />
     </Suspense>
   );
 }
