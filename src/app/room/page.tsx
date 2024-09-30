@@ -40,7 +40,7 @@ const Page = () => {
           transition={{ duration: 0.5 }}
           className="text-4xl sm:text-5xl lg:text-6xl font-bold text-center mb-8"
         >
-          Redesign your <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-pink-600">room</span> in seconds
+          Redesign your <span className="bg-clip-text text-orange-500">room</span> in seconds
         </motion.h1>
         
         <div className="flex flex-col lg:flex-row gap-12">

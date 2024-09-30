@@ -57,7 +57,7 @@ const PricingPage: React.FC = () => {
   return (
     <section className="rounded-3xl max-w-7xl mx-auto bg-black 800 text-white py-20 px-4">
       <div className="max-w-6xl mx-auto text-center mb-16">
-        <h1 className="text-5xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-pink-600">
+        <h1 className="text-5xl font-extrabold mb-6 text-orange-500">
           Unlock AI-Powered Interior Design
         </h1>
         <p className="text-xl text-gray-300 max-w-3xl mx-auto">
