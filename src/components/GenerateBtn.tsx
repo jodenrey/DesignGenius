@@ -66,6 +66,14 @@ const GenerateBtn = ({ onGenerateComplete }: { onGenerateComplete: () => void })
         const newPhoto = await dreamResponse.json();
         setOutput(newPhoto[1]);
 
+        await fetch("/api/history/save", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ imageUrl: newPhoto[1] }),
+        });
+
         // Step 2: Deduct user credits
         const deductResponse = await fetch(`/api/user/${userId}/deduct-credits`, {
           method: 'POST',
