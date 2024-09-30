@@ -29,8 +29,8 @@ const AboutPage = () => {
 
   const features = [
     { icon: FaLightbulb, title: "AI-Powered Personalization", description: "DesignGenius leverages advanced AI to deliver design solutions tailored to your unique preferences and space, ensuring a perfect fit for your lifestyle and aesthetic." },
-    { icon: FaPalette, title: "User-Friendly Experience", description: "We prioritize simplicity and ease of use. Whether you're a homeowner or a professional designer, our intuitive platform makes it easy to create stunning interiors with just a few clicks." },
-    { icon: FaLeaf, title: "Affordable and Accessible", description: "Professional-quality design shouldn't be out of reach. DesignGenius brings high-end design capabilities to everyone, eliminating the need for expensive consultations or software." },
+    { icon: FaPalette, title: "User-Friendly Experience", description: "We prioritize simplicity and ease of use. Whether you are a homeowner or a professional designer, our intuitive platform makes it easy to create stunning interiors with just a few clicks." },
+    { icon: FaLeaf, title: "Affordable and Accessible", description: "Professional-quality design should not be out of reach. DesignGenius brings high-end design capabilities to everyone, eliminating the need for expensive consultations or software." },
   ];
 
   return (
@@ -75,7 +75,7 @@ const AboutPage = () => {
               <p className="text-sm text-orange-500 mb-2">| DesignGenius</p>
               <h2 className="font-bold text-4xl text-gray-900 mb-6">About the Developers</h2>
               <p className="text-lg leading-7 text-gray-700">
-                We are Bachelor of Science in Computer Science students from STI, and DesignGenius represents the culmination of our thesis work. DesignGenius is an AI-powered platform created to assist users in transforming their interior spaces with ease and efficiency. Our website offers a range of AI-driven design solutions, from personalized room layouts to 3D visualizations, catering to homeowners, interior designers, and enthusiasts alike. Through this project, we've combined our passion for technology and design to create a user-friendly tool that makes the design process more accessible and innovative.
+                We are Bachelor of Science in Computer Science students from STI, and DesignGenius represents the culmination of our thesis work. DesignGenius is an AI-powered platform created to assist users in transforming their interior spaces with ease and efficiency. Our website offers a range of AI-driven design solutions, from personalized room layouts to 3D visualizations, catering to homeowners, interior designers, and enthusiasts alike. Through this project, we have combined our passion for technology and design to create a user-friendly tool that makes the design process more accessible and innovative.
               </p>
             </div>
           </section>
