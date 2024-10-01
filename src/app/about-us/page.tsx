@@ -23,7 +23,7 @@ const AboutPage = () => {
     { name: "Reyes, Joseph Dennis", role: "Programmer", image: joden },
     { name: "Cayetano, Jemimah", role: "System Analyst", image: jemimah },
     { name: "Uy, Joanna Marie", role: "Quality Assurance", image: joanna },
-    { name: "Dela Cruz, Mark Adrian", role: "Project Manager", image: adrian},
+    { name: "Dela Cruz, Adrian", role: "Project Manager", image: adrian},
   ];
 
   const features = [
@@ -35,15 +35,15 @@ const AboutPage = () => {
   return (
     <div className="min-h-screen">
       <div className="py-16 px-5 flex justify-center items-center">
-        <div className="bg-white rounded-3xl shadow-2xl p-10 max-w-7xl w-full">
+        <div className="bg-black rounded-3xl shadow-2xl p-10 max-w-7xl w-full">
           <motion.section 
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="mb-16 text-center"
           >
-            <h1 className="font-bold text-6xl text-gray-900 mb-4">About Us</h1>
-            <p className="text-2xl text-[#C87616] mb-12">
+           <h1 className="font-bold text-6xl text-orange-500 mb-4">About Us</h1>
+            <p className="text-2xl text-white  mb-12">
               DESIGNGENIUS: A WEB-BASED AI INTERIOR DESIGN PARTNER WITH GENERATIVE DESIGN
             </p>
 
@@ -62,8 +62,8 @@ const AboutPage = () => {
                     width={200}
                     height={200}
                   />
-                  <h3 className="mt-4 text-lg font-semibold text-gray-800">{member.name}</h3>
-                  <p className="mt-1 text-base text-gray-600">{member.role}</p>
+                  <h3 className="mt-4 text-lg font-semibold text-white">{member.name}</h3>
+                  <p className="mt-1 text-base text-white">{member.role}</p>
                 </motion.div>
               ))}
             </div>
@@ -72,8 +72,8 @@ const AboutPage = () => {
           <section className="my-16" data-aos="fade-up">
             <div className="text-left">
               <p className="text-sm text-orange-500 mb-2">| DesignGenius</p>
-              <h2 className="font-bold text-4xl text-gray-900 mb-6">About the Developers</h2>
-              <p className="text-lg leading-7 text-gray-700">
+              <h2 className="font-bold text-4xl text-white mb-6">About the Developers</h2>
+              <p className="text-lg leading-7 text-white">
                 We are Bachelor of Science in Computer Science students from STI, and DesignGenius represents the culmination of our thesis work. DesignGenius is an AI-powered platform created to assist users in transforming their interior spaces with ease and efficiency. Our website offers a range of AI-driven design solutions, from personalized room layouts to 3D visualizations, catering to homeowners, interior designers, and enthusiasts alike. Through this project, we have combined our passion for technology and design to create a user-friendly tool that makes the design process more accessible and innovative.
               </p>
             </div>
@@ -89,7 +89,7 @@ const AboutPage = () => {
             </div>
             <div className="md:w-1/2 flex flex-col justify-center">
               <h2 className="text-4xl font-bold mb-6 text-[#C87616]">Vision</h2>
-              <p className="text-lg text-gray-700 leading-relaxed">
+              <p className="text-lg text-white leading-relaxed">
                 To revolutionize interior design by harnessing the power of AI, making personalized, high-quality design
                 accessible to everyone, and inspiring creativity that transforms living spaces into innovative, functional,
                 and aesthetically pleasing environments.
@@ -113,12 +113,12 @@ const AboutPage = () => {
           </motion.div>
 
           <section className="mt-16 text-center" data-aos="fade-up">
-            <h2 className="font-bold text-4xl text-gray-900 mb-12">Why Choose Us</h2>
+            <h2 className="font-bold text-4xl text-white mb-12">Why Choose Us</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
               {features.map((feature, index) => (
-                <motion.div 
+                <motion.div   
                   key={feature.title}
-                  className="bg-white p-8 shadow-lg rounded-lg"
+                  className="bg-gray-900 p-8 shadow-lg rounded-lg"
                   whileHover={{ scale: 1.05, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
@@ -127,8 +127,8 @@ const AboutPage = () => {
                       <feature.icon className="text-4xl" />
                     </div>
                   </div>
-                  <h3 className="font-semibold text-xl text-gray-800 mb-4">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
+                  <h3 className="font-semibold text-xl text-white mb-4">{feature.title}</h3>
+                  <p className="text-white">{feature.description}</p>
                 </motion.div>
               ))}
             </div>
