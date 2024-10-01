@@ -3,9 +3,8 @@ import React, { useEffect } from 'react';
 import Image from 'next/image';
 import joden from '@/assets/joden.png';
 import joanna from '@/assets/joanna.png';
-import jemimah from '@/assets/jemimah.jpg'
-import mark from '@/assets/mark.png';
-import johndoe from '@/assets/johndoe.png'
+import jemimah from '@/assets/jemimah.jpg';
+import adrian from '@/assets/adrian.png';
 import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider'
 import { FaLightbulb, FaPalette, FaLeaf } from 'react-icons/fa';
 import { motion } from 'framer-motion';
@@ -24,7 +23,7 @@ const AboutPage = () => {
     { name: "Reyes, Joseph Dennis", role: "Programmer", image: joden },
     { name: "Cayetano, Jemimah", role: "System Analyst", image: jemimah },
     { name: "Uy, Joanna Marie", role: "Quality Assurance", image: joanna },
-    { name: "Dela Cruz, Mark Adrian", role: "Project Manager", image: johndoe},
+    { name: "Dela Cruz, Mark Adrian", role: "Project Manager", image: adrian},
   ];
 
   const features = [
