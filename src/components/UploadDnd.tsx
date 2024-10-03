@@ -41,19 +41,19 @@ function UploadDnd() {
     },
   };
 
-  useEffect(() => {
-    const fetchUserCredits = async () => {
-      if (isSignedIn && userId) {
-        const response = await fetch(`/api/user/${userId}`);
-        if (response.ok) {
-          const user = await response.json();
-          setUserCredits(user.credits || 0);
-        } else {
-          console.error('Failed to fetch user credits:', response.statusText);
-        }
+  const fetchUserCredits = async () => {
+    if (isSignedIn && userId) {
+      const response = await fetch(`/api/user/${userId}`);
+      if (response.ok) {
+        const user = await response.json();
+        setUserCredits(user.credits || 0);
+      } else {
+        console.error('Failed to fetch user credits:', response.statusText);
       }
-    };
+    }
+  };
 
+  useEffect(() => {
     fetchUserCredits();
   }, [isSignedIn, userId]);
 
@@ -75,6 +75,8 @@ function UploadDnd() {
       setPreview(imageUrl);
       setImageUrl(imageUrl);
     }
+    // Fetch updated user credits after upload attempt
+    fetchUserCredits();
   }
 
   return (
@@ -123,8 +125,7 @@ function UploadDnd() {
       )}
       
       <SubscriptionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-
-</>
+    </>
   );
 }
 

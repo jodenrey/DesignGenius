@@ -1,5 +1,7 @@
 "use client";
 import React, { useEffect, useState, useCallback, useRef } from "react";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation"; // For programmatic navigation
 import { motion } from "framer-motion";
 import { Upload, CreditCard, Home, Palette } from "lucide-react";
 import Download from "@/components/Download";
@@ -13,6 +15,8 @@ import History from "@/components/History";
 const Page = () => {
   const [credits, setCredits] = useState<number | null>(null);
   const historyRef = useRef<{ fetchHistory: () => void } | null>(null);
+  const { isLoaded, isSignedIn } = useAuth(); // Clerk's authentication state
+  const router = useRouter();
 
   const fetchCredits = useCallback(async () => {
     try {
@@ -34,9 +38,21 @@ const Page = () => {
     }
   };
 
+  // Redirect to login if user is not authenticated
   useEffect(() => {
-    fetchCredits();
-  }, [fetchCredits]);
+    if (isLoaded && !isSignedIn) {
+      router.push("/sign-in"); // Redirect to Clerk's sign-in page if not logged in
+    }
+  }, [isLoaded, isSignedIn, router]);
+
+  // Fetch credits after component mounts
+  useEffect(() => {
+    if (isSignedIn) {
+      fetchCredits();
+    }
+  }, [fetchCredits, isSignedIn]);
+
+ 
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -64,8 +80,7 @@ const Page = () => {
                 <Upload className="mr-2" /> Upload a photo of your room
               </h3>
               <p className="text-gray-300 mb-4">
-                Submit a JPEG or PNG photo that captures only a room for the
-                best results.
+                Submit a JPEG or PNG photo that captures only a room for the best results.
               </p>
               <UploadDnd />
             </motion.div>
@@ -131,19 +146,16 @@ const Page = () => {
                 <Download />
               </div>
             </motion.div>
-           
-           <motion.div
+
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1.2  }}
+              transition={{ duration: 0.5, delay: 1.2 }}
               className="bg-white bg-opacity-10 rounded-xl p-6 shadow-lg flex flex-col"
             >
-          <History ref={historyRef} />
+              <History ref={historyRef} />
             </motion.div>
-         
           </div>
-
-        
         </div>
       </div>
     </div>

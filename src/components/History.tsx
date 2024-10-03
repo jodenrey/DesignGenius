@@ -75,20 +75,22 @@ const History = forwardRef((_, ref) => {
   return (
     <div className="history-page">
       <h2 className="text-2xl font-bold mb-4">Your design history</h2>
-      <div className="history-grid space-y-4"> {/* Add space between history items */}
+      <div className="history-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"> {/* Responsive grid layout */}
         {history.map((entry) => (
           <div key={entry.id} className="history-item space-y-2"> {/* Add space between buttons and text */}
-            <Image
-              src={entry.imageUrl}
-              width={300}
-              height={200}
-              alt="Room Design"
-              className="rounded-lg shadow-lg"
-            />
+            <div className="relative w-full h-48 overflow-hidden rounded-lg shadow-lg"> {/* Full width and fixed height wrapper */}
+              <Image
+                src={entry.imageUrl}
+                width={300}
+                height={200}
+                alt="Room Design"
+                className="object-cover" // Use object-cover to maintain uniformity
+              />
+            </div>
             <p className="mt-2 text-sm text-gray-300">
               Created: {new Date(entry.createdAt).toLocaleString()}
             </p>
-
+  
             <div className="flex space-x-2"> {/* Flex container for buttons */}
               {/* Download Button */}
               <button
@@ -97,7 +99,7 @@ const History = forwardRef((_, ref) => {
               >
                 Download
               </button>
-
+  
               {/* Delete Button */}
               <button
                 className="bg-red-500 px-5 py-3 text-white rounded-lg"
@@ -109,7 +111,7 @@ const History = forwardRef((_, ref) => {
           </div>
         ))}
       </div>
-
+  
       {/* Delete Confirmation Modal */}
       <ConfirmDelete
         isOpen={isModalOpen}

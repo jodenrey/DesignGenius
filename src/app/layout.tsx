@@ -94,18 +94,36 @@ export default function RootLayout({
                   </button>
 
                   <Link
-                    href="/faq"
-                    className="text-white text-xl font-medium border-b-2 border-transparent hover:border-white"
-                    onClick={toggleSidebar}
-                  >
-                    FAQ
-                  </Link>
-                  <Link
                     href="/about-us"
                     className="text-white text-xl font-medium border-b-2 border-transparent hover:border-white"
                     onClick={toggleSidebar}
                   >
                     About Us
+                  </Link>
+
+                  <Link
+                    href="/design"
+                    className="text-white text-xl font-medium border-b-2 border-transparent hover:border-white"
+                    onClick={toggleSidebar}
+                  >
+                    Design
+                  </Link>
+
+
+                  <Link
+                    href="/pricing"
+                    className="text-white text-xl font-medium border-b-2 border-transparent hover:border-white"
+                    onClick={toggleSidebar}
+                  >
+                    Pricing
+                  </Link>
+
+                  <Link
+                    href="/faq"
+                    className="text-white text-xl font-medium border-b-2 border-transparent hover:border-white"
+                    onClick={toggleSidebar}
+                  >
+                    FAQ
                   </Link>
 
                   {/* User Info */}

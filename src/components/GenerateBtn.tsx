@@ -38,7 +38,7 @@ const GenerateBtn = ({ onGenerateComplete }: { onGenerateComplete: () => void })
     if (isProcessing || userCredits < 1) return; // Prevent clicks if processing or credits are insufficient
     setIsProcessing(true); // Disable button during processing
 
-    if (imageUrl && theme) {
+    if (imageUrl && theme && room) { // Check if imageUrl, theme, and room are present
       setLoading(true);
       setGenerating(true);
 
@@ -99,19 +99,24 @@ const GenerateBtn = ({ onGenerateComplete }: { onGenerateComplete: () => void })
         setGenerating(false);
         setIsProcessing(false); // Re-enable button after process completes
       }
+    } else {
+      // Open subscription modal if credits are not sufficient
+      if (userCredits < 1) {
+        setIsModalOpen(true);
+      }
     }
   }
+
+  const isButtonDisabled = !imageUrl || !theme || !room || isProcessing || userCredits < 1;
 
   return (
     <>
       <button
         onClick={handleClick}
-        disabled={isProcessing || userCredits < 1} // Disable button based on processing and credits
+        disabled={isButtonDisabled} // Disable button based on processing, credits, imageUrl, theme, and room
         className={`${
-          imageUrl && theme ? '' : 'cursor-not-allowed'
-        } p-5 w-full bg-orange-700 text-white rounded-lg hover:opacity-90 active:scale-[.98] transition ${
-          isProcessing ? 'opacity-50' : ''
-        }`}
+          isButtonDisabled ? 'cursor-not-allowed opacity-50' : 'hover:opacity-90'
+        } p-5 w-full bg-orange-700 text-white rounded-lg active:scale-[.98] transition`}
       >
         {isProcessing ? 'Processing...' : 'Generate Room'}
       </button>
