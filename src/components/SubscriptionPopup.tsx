@@ -47,9 +47,9 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ isOpen, onClose }
   };
 
   const plans = [
-    { name: 'Basic', credits: 30, price: 1000, popular: false },
-    { name: 'Premium', credits: 100, price: 2000, popular: true },
-    { name: 'Pro', credits: 200, price: 3500, popular: false },
+    { name: 'Basic', credits: 30, price: 499, popular: false },
+    { name: 'Standard', credits: 100, price: 999, popular: true },
+    { name: 'Premium', credits: 200, price: 1499, popular: false },
   ];
 
   return (

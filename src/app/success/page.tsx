@@ -41,7 +41,7 @@ const SuccessPage = () => {
   }, [session_id]);
 
   return (
-    <div className='min-h-screen'>
+  
     <div className="min-h-screen flex items-center justify-center">
       {loading ? (
         <div className="flex flex-col items-center">
@@ -79,7 +79,7 @@ const SuccessPage = () => {
         </div>
       )}
     </div>
-    </div>
+  
   );
 };
 

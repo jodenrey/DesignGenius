@@ -21,8 +21,8 @@ const PricingPage: React.FC = () => {
 
   const plans: Plan[] = [
     { name: 'Basic', credits: 30, price: 499, features: ['30 room redesigns', 'Every design available'] },
-    { name: 'Premium', credits: 100, price: 999, features: ['100 room redesigns', 'Every design available'] },
-    { name: 'Pro', credits: 200, price: 1499, features: ['200 room redesigns', 'Every design available'] },
+    { name: 'Standard', credits: 100, price: 999, features: ['100 room redesigns', 'Every design available'] },
+    { name: 'Premium', credits: 200, price: 1499, features: ['200 room redesigns', 'Every design available'] },
   ];
 
   const handleChoosePlan = async (credits: number) => {

@@ -96,6 +96,7 @@ const DesignExamples = () => {
   ];
 
   return (
+    <div className='min-h-screen'>
     <div className="py-16 px-5 flex justify-center items-center">
       <div className="bg-black rounded-3xl shadow-2xl p-10 max-w-7xl w-full">
       <h1 className="font-bold text-6xl text-orange-500 mb-4 text-center">Sample Designs</h1>
@@ -143,6 +144,7 @@ const DesignExamples = () => {
         </motion.div>
       </div>
     </div>
+</div>
   );
 };
 
