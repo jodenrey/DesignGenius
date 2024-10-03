@@ -81,7 +81,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ isOpen, onClose }
               <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <Dialog.Title
                   as="h3"
-                  className="text-3xl font-bold  bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-pink-600 text-center mb-6"
+                  className="text-3xl font-bold text-orange-500 text-center mb-6"
                 >
                   Unlock AI-Powered Interior Design
 
