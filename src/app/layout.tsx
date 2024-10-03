@@ -117,6 +117,20 @@ export default function RootLayout({
 
               {/* Standard header for medium and larger screens */}
               <div className="hidden md:flex items-center gap-8">
+
+              <Link
+                  href="/about-us"
+                  className="text-white md:text-xl text-lg font-medium border-b-2 border-transparent hover:border-white"
+                >
+                  About Us
+                </Link>
+
+              <Link
+                  href="/design"
+                  className="text-white md:text-xl text-lg font-medium border-b-2 border-transparent hover:border-white"
+                >
+                  Design
+                </Link>
               <Link
                   href="/pricing"
                   className="text-white md:text-xl text-lg font-medium border-b-2 border-transparent hover:border-white"
@@ -129,13 +143,7 @@ export default function RootLayout({
                 >
                   FAQ
                 </Link>
-                <Link
-                  href="/about-us"
-                  className="text-white md:text-xl text-lg font-medium border-b-2 border-transparent hover:border-white"
-                >
-                  About Us
-                </Link>
-
+               
                 {/* User Info */}
                 <div className="mt-4 md:mt-0">
                   <UserInf />
