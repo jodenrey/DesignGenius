@@ -89,6 +89,21 @@ const Page = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
+              className="flex justify-between items-center bg-white bg-opacity-10 rounded-xl p-4 shadow-lg"
+            >
+              <div className="flex items-center">
+                <CreditCard className="mr-2" />
+                <span className="font-semibold">Your Credits:</span>
+              </div>
+              <span className="text-2xl font-bold text-orange-400">
+                {credits ?? "..."}
+              </span>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
               className="bg-white bg-opacity-10 rounded-xl p-6 shadow-lg relative z-20"
             >
               <h3 className="font-bold text-xl mb-4 flex items-center">
@@ -100,7 +115,7 @@ const Page = () => {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
               className="bg-white bg-opacity-10 rounded-xl p-6 shadow-lg"
             >
               <h3 className="font-bold text-xl mb-4 flex items-center">
@@ -109,20 +124,7 @@ const Page = () => {
               <ThemeOptions />
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.8 }}
-              className="flex justify-between items-center bg-white bg-opacity-10 rounded-xl p-4 shadow-lg"
-            >
-              <div className="flex items-center">
-                <CreditCard className="mr-2" />
-                <span className="font-semibold">Your Credits:</span>
-              </div>
-              <span className="text-2xl font-bold text-orange-400">
-                {credits ?? "..."}
-              </span>
-            </motion.div>
+           
 
             <GenerateBtn
               onGenerateComplete={() => {
