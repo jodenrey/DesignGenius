@@ -42,9 +42,9 @@ export async function POST(req: Request) {
       if (user) {
         let creditsToAdd = 0;
 
-        if (amountTotal === 100000) creditsToAdd = 30;
-        if (amountTotal === 200000) creditsToAdd = 100;
-        if (amountTotal === 350000) creditsToAdd = 200;
+        if (amountTotal === 49900) creditsToAdd = 30;
+        if (amountTotal === 99900) creditsToAdd = 100;
+        if (amountTotal === 149900) creditsToAdd = 200;
 
         await prisma.user.update({
           where: { email: userEmail },

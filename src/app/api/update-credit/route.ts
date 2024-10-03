@@ -26,9 +26,9 @@ export const POST = async (req: Request) => {
 
     // Update credits based on product purchased
     let creditsToAdd = 0;
-    if (session.amount_total === 1000) creditsToAdd = 30;
-    if (session.amount_total === 2000) creditsToAdd = 100;
-    if (session.amount_total === 3500) creditsToAdd = 200;
+    if (session.amount_total === 499) creditsToAdd = 30;
+    if (session.amount_total === 999) creditsToAdd = 100;
+    if (session.amount_total === 1499) creditsToAdd = 200;
 
     await prisma.user.update({
       where: { email: userEmail },

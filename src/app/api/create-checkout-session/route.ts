@@ -24,9 +24,9 @@ export async function POST(req: Request) {
   const { credits } = body;
 
   const priceForCredits: { [key: number]: number } = {
-    30: 100000, // ₱1000.00 should be 100000 (in cents)
-    100: 200000, // ₱2500.00 should be 250000 (in cents)
-    200: 350000, // ₱4500.00 should be 450000 (in cents)
+    30: 49900, // ₱499.00 should be 49900 (in cents)
+    100: 99900, // ₱99900.00 should be 99900 (in cents)
+    200: 149900, // ₱149900.00 should be 149900 (in cents)
   };
   const price = priceForCredits[credits];
 
