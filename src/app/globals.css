@@ -24,6 +24,21 @@
   pointer-events: none;
 }
 
+.loader {
+  border: 8px solid rgba(255, 255, 255, 0.3); /* Light transparent border */
+  border-top: 8px solid #ffffff; /* White top border */
+  border-radius: 50%;
+  width: 50px; /* Adjust size */
+  height: 50px; /* Adjust size */
+  animation: spin 1s linear infinite; /* Spin animation */
+}
+
+/* Keyframes for spinning animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 ::-webkit-scrollbar {
   width: 12px;
 }
