@@ -8,88 +8,89 @@ const DesignExamples = () => {
   const examples = [
     {
       id: 1,
-      before: '/1.png',
-      after: '/2.jpg',
-      title: 'Modern Living Room',
-      description: 'A sleek, contemporary design with minimalist furniture.'
+      before: '/13.jpg',
+      after: '/15.jpg',
+      title: 'Classic Living Room',
+      description: 'This luxurious living room features ornate details, elegant furnishings, and a grand chandelier, creating a timeless and sophisticated atmosphere.'
     },
     {
       id: 2,
       before: '/3.jpg',
       after: '/4.jpg',
-      title: 'Cozy Bedroom',
-      description: 'A warm and inviting bedroom transformation for comfort.'
+      title: 'Luxury Vintage Bathroom',
+      description: 'This opulent bathroom features ornate details, luxurious fixtures, and a freestanding bathtub, creating a spa-like atmosphere.'
     },
     {
       id: 3,
-      before: '/5.jpg',
-      after: '/6.jpg',
-      title: 'Elegant Kitchen',
-      description: 'A kitchen remodel with luxury materials and modern finishes.'
+      before: '/16.jpg',
+      after: '/17.jpg',
+      title: 'Rustic Dining Room',
+      description: 'This cozy dining room features rustic wood accents, a large dining table, and vintage-inspired lighting, creating a warm and inviting atmosphere for family meals.'
     },
     {
       id: 4,
       before: '/7.jpg',
       after: '/8.jpg',
-      title: 'Chic Dining Room',
-      description: 'A stylish dining area with contemporary art and decor.'
+      title: 'Opulent Master Bedroom',
+      description: 'This luxurious bedroom features a grand chandelier, elegant furnishings, and intricate detailing, creating a sophisticated and relaxing retreat.'
     },
     {
       id: 5,
       before: '/9.jpg',
       after: '/10.jpg',
-      title: 'Vintage Workspace',
-      description: 'A retro-inspired workspace for creativity and productivity.'
+      title: 'Contemporary Living Room',
+      description: 'This modern living room features clean lines, neutral colors, and ample natural light, creating a comfortable and stylish space.'
     },
     {
         id: 6,
         before: '/11.jpg',
         after: '/12.jpg',
-        title: 'Luxurious Bathroom',
-        description: 'A bathroom makeover with high-end finishes and spa-like features.'
+        title: 'Rustic Farmhouse Kitchen',
+        description: 'This charming kitchen features warm wood tones, vintage-inspired lighting, and farmhouse-style accents, creating a cozy and inviting atmosphere.'
       },
     {
       id: 7,
       before: '/13.jpg',
       after: '/14.jpg',
-      title: 'Luxurious Bathroom',
-      description: 'A bathroom makeover with high-end finishes and spa-like features.'
+      title: 'Elegant Living Room',
+      description: 'This sophisticated living room features a neutral color palette, elegant furnishings, and a statement chandelier, creating a refined and inviting atmosphere.'
     },
     {
         id: 8,
-        before: '/13.jpg',
-        after: '/15.jpg',
-        title: 'Luxurious Bathroom',
-        description: 'A bathroom makeover with high-end finishes and spa-like features.'
+        before: '/1.png',
+        after: '/2.jpg',
+        title: 'Elegant Rustic Living Room',
+        description: 'The textured walls, exposed beams, and antique furnishings create a warm and cozy atmosphere. Perfect for a old money look.'
       },
       {
         id: 9,
-        before: '/16.jpg',
-        after: '/17.jpg',
-        title: 'Luxurious Bathroom',
-        description: 'A bathroom makeover with high-end finishes and spa-like features.'
+        before: '/5.jpg',
+        after: '/6.jpg',
+        title: 'Sleek Modern Kitchen',
+        description: 'This contemporary kitchen features clean lines, high-quality appliances, and a minimalist aesthetic, creating a functional and stylish space.'
+       
       },
       {
         id: 10,
         before: '/19.png',
         after: '/20.jpg',
-        title: 'Luxurious Bathroom',
-        description: 'A bathroom makeover with high-end finishes and spa-like features.'
+        title: 'Multifunctional Bedroom',
+        description: 'This versatile bedroom features a convertible sofa that doubles as a bed, built-in storage, and a minimalist aesthetic, making it ideal for small spaces.'
       },
 
       {
         id: 11,
         before: '/21.jpg',
         after: '/22.jpg',
-        title: 'Luxurious Bathroom',
-        description: 'A bathroom makeover with high-end finishes and spa-like features.'
+        title: 'Minimalist Bathroom',
+        description: 'This sleek bathroom features clean lines, neutral colors, and a large walk-in shower, creating a spa-like and relaxing atmosphere.'
       },
       {
         id: 12,
         before: '/23.jpg',
         after: '/24.jpg',
-        title: 'Luxurious Bathroom',
-        description: 'A bathroom makeover with high-end finishes and spa-like features.'
+        title: 'Vintage Living Room',
+        description: 'This inviting living room features vintage-inspired furnishings, ornate details, and a grand chandelier, creating a sophisticated and timeless atmosphere.'
       },
 
   ];
@@ -97,9 +98,9 @@ const DesignExamples = () => {
   return (
     <div className="py-16 px-5 flex justify-center items-center">
       <div className="bg-black rounded-3xl shadow-2xl p-10 max-w-7xl w-full">
-      <h1 className="font-bold text-6xl text-orange-500 mb-4 text-center">Example Designs</h1>
+      <h1 className="font-bold text-6xl text-orange-500 mb-4 text-center">Sample Designs</h1>
             <p className="text-2xl text-white text-center mb-12">
-              DESIGNGENIUS: A WEB-BASED AI INTERIOR DESIGN PARTNER WITH GENERATIVE DESIGN
+              This are the sample design that our AI generate.  
             </p>
         <motion.div
           initial={{ opacity: 0 }}

@@ -17,7 +17,7 @@ export default function Home() {
           </span>
         </h1>
         <p className="text-black text-lg text-center">
-          Snap a photo of your room and explore its stunning transformation through a variety of captivating themes.
+          Snap a photo of your room or a sketch of a room and explore its stunning transformation through a variety of captivating themes.
         </p>
         {isLoaded && (
           isSignedIn ? (
