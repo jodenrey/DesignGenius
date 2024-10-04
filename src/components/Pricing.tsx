@@ -70,10 +70,10 @@ const PricingPage: React.FC = () => {
           <div 
             key={plan.name}
             className={`bg-gray-900 p-8 rounded-2xl shadow-xl transform hover:scale-105 transition duration-300 ease-in-out ${
-              plan.name === 'Premium' ? 'border-2 border-orange-500 relative overflow-hidden' : ''
+              plan.name === 'Standard' ? 'border-2 border-orange-500 relative overflow-hidden' : ''
             }`}
           >
-            {plan.name === 'Premium' && (
+            {plan.name === 'Standard' && (
               <div className="absolute top-0 right-0 bg-orange-500 text-white px-4 py-1 rounded-bl-lg font-semibold">
                 Best Value
               </div>
