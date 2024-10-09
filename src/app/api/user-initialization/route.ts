@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
         data: {
           id: userId,
           email,
-          credits: 3, // Default credits
+          credits: 5, // Default credits
         },
       });
     }
