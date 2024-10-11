@@ -1,24 +1,127 @@
 'use client'
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import joden from '@/assets/joden.png';
 import joanna from '@/assets/joanna.png';
 import jemimah from '@/assets/jemimah.jpg';
 import adrian from '@/assets/adrian.png';
 import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider'
-import { FaLightbulb, FaPalette, FaLeaf } from 'react-icons/fa';
+import { FaLightbulb, FaPalette, FaLeaf, FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import toast, { Toaster } from 'react-hot-toast';
+
 
 const AboutPage = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
   useEffect(() => {
     AOS.init({
       duration: 1000,
       once: true,
     });
   }, []);
+  
+  const formAnimation = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.5,
+        staggerChildren: 0.1,
+      }
+    }
+  };
 
+  const itemAnimation = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.5
+      }
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  
+    // Prepare form data
+    const formData = {
+      name,
+      email,
+      message,
+    };
+  
+   
+   // Regular expression for validating email
+   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+   // Check if email is valid
+   if (!emailRegex.test(email)) {
+     toast.error('Please enter a valid email address.', {
+       icon: '❌',
+       style: {
+         borderRadius: '10px',
+         background: '#333',
+         color: '#fff',
+       },
+     });
+     return; // Stop further execution
+   }
+ 
+   try {
+     const response = await fetch('/api/contact', {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/json',
+       },
+       body: JSON.stringify(formData),
+     });
+ 
+     if (response.ok) {
+       toast.success(' Message sent successfully!', {
+         icon: '🚀',
+         style: {
+           borderRadius: '10px',
+           background: '#333',
+           color: '#fff',
+           fontWeight: 'bold', // Make the text bold
+           fontSize: '16px', // Increase font size for better readability
+           padding: '10px 15px', // Add some padding
+           boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)', // Add a subtle shadow for dept
+         },
+       });
+ 
+       setName('');
+       setEmail('');
+       setMessage('');
+     } else {
+       const errorData = await response.json();
+       toast.error('Error sending message. Please try again.', {
+         icon: '❌',
+         style: {
+           borderRadius: '10px',
+           background: '#333',
+           color: '#fff',
+         },
+       });
+     }
+   } catch (error) {
+     toast.error('Error sending message. Please try again.', {
+       icon: '❌',
+       style: {
+         borderRadius: '10px',
+         background: '#333',
+         color: '#fff',
+       },
+     });
+   }
+ };
   const teamMembers = [
     { name: "Reyes, Joseph Dennis", role: "Programmer", image: joden },
     { name: "Cayetano, Jemimah", role: "System Analyst", image: jemimah },
@@ -133,6 +236,101 @@ const AboutPage = () => {
               ))}
             </div>
           </section>
+
+
+       {/* New Contact Section */}
+       <section className="mt-20 text-center" data-aos="fade-up">
+        <h2 className="font-bold text-4xl text-white mb-12">Contact Us</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="bg-gray-900 p-8 rounded-lg shadow-lg">
+            <motion.form 
+              onSubmit={handleSubmit} 
+              className="space-y-6"
+              initial="hidden"
+              animate="visible"
+              variants={formAnimation}
+            >
+              <motion.div variants={itemAnimation}>
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full p-3 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#C87616] transition-all duration-300 hover:bg-gray-700"
+                  required
+                />
+              </motion.div>
+              <motion.div variants={itemAnimation}>
+                <input
+                  type="email"
+                  placeholder="Your Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full p-3 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#C87616] transition-all duration-300 hover:bg-gray-700"
+                  required
+                />
+              </motion.div>
+              <motion.div variants={itemAnimation}>
+                <textarea
+                  placeholder="Your Message"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="w-full p-3 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#C87616] h-32 resize-none transition-all duration-300 hover:bg-gray-700"
+                  required
+                ></textarea>
+              </motion.div>
+              <motion.button
+                type="submit"
+                className="bg-[#C87616] text-white py-3 px-6 rounded-md hover:bg-[#E9A254] transition duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                variants={itemAnimation}
+              >
+                Send Message
+                
+              </motion.button>
+              <Toaster position="top-center" reverseOrder={false} />
+
+            </motion.form>
+          </div>
+    <div className="bg-gray-900 p-8 rounded-lg shadow-lg flex flex-col justify-between">
+      <div className="space-y-6 mb-6">
+        <motion.div
+          className="flex items-center space-x-4"
+          whileHover={{ scale: 1.05 }}
+        >
+          <FaEnvelope className="text-2xl text-[#C87616]" />
+          <span className="text-white">designgeniusonline@gmail.com</span>
+        </motion.div>
+        <motion.div
+          className="flex items-center space-x-4"
+          whileHover={{ scale: 1.05 }}
+        >
+          <FaPhone className="text-2xl text-[#C87616]" />
+          <span className="text-white">+63 9123456789</span>
+        </motion.div>
+        <motion.div
+          className="flex items-start space-x-4"
+          whileHover={{ scale: 1.05 }}
+        >
+          <FaMapMarkerAlt className="text-2xl text-[#C87616] mt-1" />
+          <span className="text-white text-left">STI Academic Center, Quirino Highway, Tungkong Mangga, San Jose Del Monte City, 3023 Bulacan</span>
+        </motion.div>
+      </div>
+      <div className="w-full h-64 rounded-lg overflow-hidden">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3857.826030818503!2d121.07189187592844!3d14.778827072686695!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397af51766d26a3%3A0x30d0764cb84cc80!2sSTI%20Academic%20Center%20San%20Jose%20Del%20Monte!5e0!3m2!1sen!2sph!4v1728659744109!5m2!1sen!2sph"
+          width="100%"
+          height="100%"
+          style={{ border: 0 }}
+          allowFullScreen={true}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+</section>
         </div>
       </div>
     </div>

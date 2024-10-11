@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .selected {
   background-color: rgba(103, 118, 255, 0.363);
   border-radius: 10px;
@@ -13,10 +12,9 @@
   background: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5));
 }
 
-
-.gradiant-bg::before{
+.gradiant-bg::before {
   content: "";
-  background: radial-gradient(20% 50% at 50% 50%,rgba(71,127,247,.376) 0,rgba(37,38,44,0) 100%);
+  background: radial-gradient(20% 50% at 50% 50%, rgba(71, 127, 247, .376) 0, rgba(37, 38, 44, 0) 100%);
   position: absolute;
   z-index: -10;
   transform: scale(2);
@@ -39,22 +37,22 @@
   100% { transform: rotate(360deg); }
 }
 
+/* Hide scrollbar for webkit browsers */
 ::-webkit-scrollbar {
-  width: 12px;
+  display: none; /* Hide the scrollbar */
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
+/* Hide scrollbar for Firefox */
+* {
+  scrollbar-width: none; /* Firefox */
 }
 
-::-webkit-scrollbar-thumb {
-  background-color: #C87616; /* Custom color */
-  border-radius: 6px;
-  border: 3px solid #f1f1f1;
+*::-webkit-scrollbar {
+  display: none; /* Webkit */
 }
 
 @media screen and (max-width : 1100px) {
-  .gradiant-bg::before{
-      transform: scale(1);
+  .gradiant-bg::before {
+    transform: scale(1);
   }
 }
