@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useAuth } from "@clerk/nextjs";
 import ConfirmDelete from "@/components/ConfirmDelete";  // Import the ConfirmDelete modal
 import useDownloader from "react-use-downloader";
+import { Download, Trash2, Calendar } from "lucide-react";
+
 
 // Define the type for a history entry
 interface HistoryEntry {
@@ -87,27 +89,27 @@ const History = forwardRef((_, ref) => {
                 className="object-cover" // Use object-cover to maintain uniformity
               />
             </div>
-            <p className="mt-2 text-sm text-gray-300">
-              Created: {new Date(entry.createdAt).toLocaleString()}
-            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center">
+                <Calendar className="w-4 h-4 mr-2" />
+                {new Date(entry.createdAt).toLocaleString()}
+              </p>
   
-            <div className="flex space-x-2"> {/* Flex container for buttons */}
-              {/* Download Button */}
-              <button
-                onClick={() => download(entry.imageUrl, fileName(10))} // Download button
-                className="bg-blue-500 px-5 py-3 text-white rounded-lg"
-              >
-                Download
-              </button>
-  
-              {/* Delete Button */}
-              <button
-                className="bg-red-500 px-5 py-3 text-white rounded-lg"
-                onClick={() => openDeleteModal(entry.id)}
-              >
-                Delete
-              </button>
-            </div>
+            <div className="flex justify space-x-2">
+                <button
+                  onClick={() => download(entry.imageUrl, fileName(10))}
+                  className="p-2  hover:bg-orange-600 text-white rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+                  title="Download"
+                >
+                  <Download className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => openDeleteModal(entry.id)}
+                  className="p-2  hover:bg-red-600 text-white rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50"
+                  title="Delete"
+                >
+                  <Trash2 className="w-5 h-5" />
+                </button>
+              </div>
           </div>
         ))}
       </div>
