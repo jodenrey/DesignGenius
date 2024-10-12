@@ -8,6 +8,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 import UserInf from '@/components/UserInf';
 import { useState } from 'react';
 import InitializeUser from '@/components/InitializeUser';
+import { CrispProvider } from '@/components/crisp-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,8 +26,9 @@ export default function RootLayout({
 
   return (
     <ClerkProvider>
-         <InitializeUser />
+    <InitializeUser />
       <html lang="en">
+      <CrispProvider />
         <body
           className={inter.className}
           style={{
