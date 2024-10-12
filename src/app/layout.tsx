@@ -28,7 +28,6 @@ export default function RootLayout({
     <ClerkProvider>
     <InitializeUser />
       <html lang="en">
-      <CrispProvider />
         <body
           className={inter.className}
           style={{
