@@ -1,11 +1,12 @@
 'use client'
+
 import { useRoom } from '@/store/useStore';
 import React from 'react'
 import Select from 'react-select';
 
 const SelectInp = () => {
   const setRoom = useRoom((state: any) => state.setRoom);
-  
+
   function handleChange(e: any) {
     setRoom(e.value);
   }
@@ -14,7 +15,12 @@ const SelectInp = () => {
     { value: 'living room', label: 'Living Room' },
     { value: 'bedroom', label: 'Bedroom' },
     { value: 'bathroom', label: 'Bathroom' },
-    { value: 'kitchen', label: 'Kitchen' }
+    { value: 'kitchen', label: 'Kitchen' },
+    { value: 'dining room', label: 'Dining Room' },
+    { value: 'office', label: 'Office' },
+    { value: 'basement', label: 'Basement' },
+    { value: 'gaming room', label: 'Gaming Room' },
+    { value: 'outdoor patio', label: 'Outdoor Patio' }
   ];
 
   const customStyles = {
@@ -26,6 +32,12 @@ const SelectInp = () => {
     menu: (provided: any) => ({
       ...provided,
       backgroundColor: 'white',
+      maxHeight: 'none',  // Remove max height constraint
+      height: 'auto',     // Allow the menu to grow based on content
+    }),
+    menuList: (provided: any) => ({
+      ...provided,
+      maxHeight: 'none',  // Remove max height constraint
     }),
     option: (provided: any, state: { isSelected: any; }) => ({
       ...provided,
@@ -44,9 +56,9 @@ const SelectInp = () => {
 
   return (
     <div className='w-full'>
-      <Select 
-        onChange={handleChange} 
-        options={options} 
+      <Select
+        onChange={handleChange}
+        options={options}
         defaultValue={options[0]}
         styles={customStyles}
       />

@@ -1,12 +1,6 @@
 import { NextResponse } from "next/server";
-import { headers } from "next/headers";
-
-// Create a new ratelimiter, that allows 5 requests per 24 hours
-
 
 export async function POST(request: Request) {
-  // Rate Limiter Code
-
 
   const { imageUrl, theme, room } = await request.json();
 
@@ -20,16 +14,11 @@ export async function POST(request: Request) {
     body: JSON.stringify({
       version:
         "854e8727697a057c525cdb45ab037f64ecca770a1769cc52287c2e56472a247b",
-      input: {
-        image: imageUrl,
-        prompt:
-          room === "Gaming Room"
-            ? "a room for gaming with gaming computers, gaming consoles, and gaming chairs"
-            : `a ${theme.toLowerCase()} ${room.toLowerCase()}`,
-        a_prompt:
-          "best quality, extremely detailed, photo from Pinterest, interior, cinematic photo, ultra-detailed, ultra-realistic, award-winning, high resolution, highly detailed, 4k",
+        input: {
+          image: imageUrl,
+          prompt: `A photo of a ${theme} ${room}, 4k photo, highly detailed with natural lighting, stylish furniture, intricate textures, sharp focus, realistic shadows, and photorealistic lighting`,
         n_prompt:
-          "blurry, illustration, distorted, horror, people, human, longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, lowres, watermark, banner, logo, contactinfo, text, deformed, blurry, blur, out of focus, out of frame, surreal, extra, ugly, upholstered walls, fabric walls, plush walls, mirror, mirrored",
+        "blurry, cartoonish, illustration, surreal, people, humans, distorted, lowres, bad anatomy, extra limbs, missing fingers, low quality, watermark, logo, text, abstract, overexposed, grainy, poorly framed, over-saturated, unnatural lighting, artificial elements, HDR",
          
       },
     }), 

@@ -6,6 +6,9 @@ import professional from "@/assets/professional.png";
 import tribal from "@/assets/tribal.png";
 import tropical from "@/assets/tropical.png";
 import vintage from "@/assets/vintage.png";
+import industrial from "@/assets/industrial.jpg";
+import neoclassic from "@/assets/neoclassic.jpg";
+import summer from "@/assets/summer.jpg";
 import Image from 'next/image';
 import { useTheme } from '@/store/useStore';
 
@@ -20,6 +23,10 @@ const ThemeOptions = () => {
     {value : "tribal" , imgUrl : tribal},
     {value : "tropical" , imgUrl : tropical},
     {value : "vintage" , imgUrl : vintage},
+    {value : "industrial" , imgUrl : industrial},
+    {value : "neoclassic" , imgUrl : neoclassic},
+    {value : "summer" , imgUrl : summer},
+
   ]
 
   function handleClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
