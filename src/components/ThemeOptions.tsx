@@ -17,15 +17,15 @@ const ThemeOptions = () => {
   const setTheme=useTheme((state:any)=>state.setTheme)
 
   const themes = [
-    {value : "costal" , imgUrl : coastal},
+    {value : "minimalist" , imgUrl : coastal},
     {value : "modern" , imgUrl : modern},
     {value : "professional" , imgUrl : professional},
-    {value : "tribal" , imgUrl : tribal},
-    {value : "tropical" , imgUrl : tropical},
+    {value : "contemporary" , imgUrl : tribal},
+    {value : "mediterranean" , imgUrl : tropical},
     {value : "vintage" , imgUrl : vintage},
     {value : "industrial" , imgUrl : industrial},
     {value : "neoclassic" , imgUrl : neoclassic},
-    {value : "summer" , imgUrl : summer},
+    {value : "scandinavian" , imgUrl : summer},
 
   ]
 
