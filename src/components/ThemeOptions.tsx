@@ -1,14 +1,14 @@
 'use client'
 import React from 'react'
-import coastal from "@/assets/coastal.png";
+import minimalist from "@/assets/minimalist.jpg";
 import modern from "@/assets/modern.png";
 import professional from "@/assets/professional.png";
-import tribal from "@/assets/tribal.png";
-import tropical from "@/assets/tropical.png";
+import contemporary from "@/assets/contemporary.jpg";
+import mediterranean from "@/assets/mediterranean.jpg";
 import vintage from "@/assets/vintage.png";
 import industrial from "@/assets/industrial.jpg";
 import neoclassic from "@/assets/neoclassic.jpg";
-import summer from "@/assets/summer.jpg";
+import scandinavian from "@/assets/scandinavian.jpg";
 import Image from 'next/image';
 import { useTheme } from '@/store/useStore';
 
@@ -17,15 +17,15 @@ const ThemeOptions = () => {
   const setTheme=useTheme((state:any)=>state.setTheme)
 
   const themes = [
-    {value : "minimalist" , imgUrl : coastal},
+    {value : "minimalist" , imgUrl : minimalist},
     {value : "modern" , imgUrl : modern},
     {value : "professional" , imgUrl : professional},
-    {value : "contemporary" , imgUrl : tribal},
-    {value : "mediterranean" , imgUrl : tropical},
+    {value : "contemporary" , imgUrl : contemporary},
+    {value : "mediterranean" , imgUrl : mediterranean},
     {value : "vintage" , imgUrl : vintage},
     {value : "industrial" , imgUrl : industrial},
     {value : "neoclassic" , imgUrl : neoclassic},
-    {value : "scandinavian" , imgUrl : summer},
+    {value : "scandinavian" , imgUrl : scandinavian},
 
   ]
 
