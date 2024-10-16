@@ -22,7 +22,17 @@ function UploadDnd() {
         ? process.env.NEXT_PUBLIC_UPLOAD_API_KEY
         : "free",
     maxFileCount: 1,
-    mimeTypes: ["image/jpeg", "image/png", "image/jpg"],
+    mimeTypes: [
+      "image/jpeg",
+      "image/png",
+      "image/jpg",
+      "image/gif",
+      "image/webp",
+      "image/avif",
+      "image/heic",
+      "image/tiff",
+      "image/bmp",
+    ],
     editor: { images: { crop: false } },
     styles: {
       colors: {
@@ -60,11 +70,7 @@ function UploadDnd() {
   function onUpdate({ uploadedFiles }: any) {
     if (uploadedFiles.length !== 0) {
       const imageUrl = uploadedFiles[0].fileUrl;
-      const fileExtension = imageUrl.split('.').pop().toLowerCase();
-      if (!['jpeg', 'jpg', 'png'].includes(fileExtension)) {
-        alert('Invalid file type. Please select a JPEG or PNG image.');
-        return;
-      }
+    
 
       // Show popup if user has no credits
       if (userCredits < 1) {
