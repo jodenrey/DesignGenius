@@ -80,7 +80,7 @@ const Page = () => {
                 <Upload className="mr-2" /> Upload a photo of your room
               </h3>
               <p className="text-gray-300 mb-4">
-                Submit a JPEG or PNG photo that captures only a room or a sketch room for the best results.
+                Submit a image that captures only a room or a sketch room for the best results. Empty room does not work.
               </p>
               <UploadDnd />
             </motion.div>
