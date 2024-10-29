@@ -18,6 +18,7 @@
     "@heroicons/react": "^2.1.5",
     "@libsql/client": "^0.14.0",
     "@neondatabase/serverless": "^0.9.5",
+    "@paypal/react-paypal-js": "^8.7.0",
     "@planetscale/database": "^1.19.0",
     "@prisma/adapter-planetscale": "^5.20.0",
     "@prisma/client": "^5.20.0",
