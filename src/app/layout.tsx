@@ -8,7 +8,6 @@ import { ClerkProvider } from '@clerk/nextjs';
 import UserInf from '@/components/UserInf';
 import { useState } from 'react';
 import InitializeUser from '@/components/InitializeUser';
-import { CrispProvider } from '@/components/crisp-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
