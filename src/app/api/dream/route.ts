@@ -16,7 +16,7 @@ export async function POST(request: Request) {
         "854e8727697a057c525cdb45ab037f64ecca770a1769cc52287c2e56472a247b",
         input: {
           image: imageUrl,
-          prompt: `A photo of a ${theme} ${room}, 4k photo, highly detailed with natural lighting, stylish furniture, intricate textures, sharp focus, realistic shadows, and photorealistic lighting`,
+          prompt: `A photo of a ${theme} ${room}, 4k photo, highly detailed, stylish furniture, intricate textures, sharp focus, realistic shadows, and photorealistic lighting`,
         n_prompt:
         "blurry, cartoonish, illustration, surreal, people, humans, distorted, lowres, bad anatomy, extra limbs, missing fingers, low quality, watermark, logo, text, abstract, overexposed, grainy, poorly framed, over-saturated, unnatural lighting, artificial elements, HDR",
          
