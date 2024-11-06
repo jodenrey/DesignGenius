@@ -19,7 +19,6 @@ export async function POST(request: Request) {
           prompt: `A photo of a ${theme} ${room}, 4k photo, highly detailed, stylish furniture, intricate textures, sharp focus, realistic shadows, and photorealistic lighting`,
           n_prompt:
         "blurry, cartoonish, illustration, surreal, people, humans, distorted, lowres, bad anatomy, extra limbs, missing fingers, low quality, watermark, logo, text, abstract, overexposed, grainy, poorly framed, over-saturated, unnatural lighting, artificial elements, HDR",
-        ddim_steps: 50
 
       },
     }), 
