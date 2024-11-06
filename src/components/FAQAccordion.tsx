@@ -34,8 +34,16 @@ const FAQAccordion = () => {
       },
       {
         question: 'Why can’t I upload the image?',
-        answer: 'Make sure it is JPG and PNG file type only.',
+        answer: 'Make sure it is an image file type and you have enough credits. We accept all Image Extension.',
       },    
+      {
+        question: 'What security measures are in place to ensure the security of transactions?',
+        answer: 'Our platform uses Stripe, a highly secure payment processing service, to handle all transactions. Stripe employs advanced encryption protocols, such as AES-256, to safeguard payment information and complies with PCI-DSS Level 1, the highest level of certification in the payment industry. This means your financial information is always encrypted and protected from unauthorized access. Additionally, Stripe monitors transactions for suspicious activity, providing an extra layer of security for every payment made on our platform.',
+      },   
+      {
+        question: 'What security measures are in place for user data?',
+        answer: 'We prioritize the security and privacy of user data by using Clerk, a robust authentication and identity management service. Clerk provides secure authentication by encrypting user credentials, supporting multi-factor authentication (MFA), and adhering to best practices for data protection. This ensures that user accounts are safeguarded against unauthorized access, protecting personal information at every step.'
+      },   
   ];
 
   return (
