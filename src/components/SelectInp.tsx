@@ -17,9 +17,8 @@ const SelectInp = () => {
     { value: 'bathroom', label: 'Bathroom' },
     { value: 'kitchen', label: 'Kitchen' },
     { value: 'dining room', label: 'Dining Room' },
-    { value: 'office', label: 'Office' },
+    { value: 'home office', label: 'Home Office' },
     { value: 'basement', label: 'Basement' },
-    { value: 'gaming room', label: 'Gaming Room' },
     { value: 'outdoor patio', label: 'Outdoor Patio' }
   ];
 
