@@ -16,7 +16,7 @@ export async function ensureUserInDatabase(userId: string) {
       data: {
         id: userId,
         email: user?.emailAddresses[0]?.emailAddress || '',
-        credits: 3, // Default credits for new users
+        credits: 5, // Default credits for new users
       },
     });
   }
