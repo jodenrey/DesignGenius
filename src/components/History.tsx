@@ -39,6 +39,8 @@ const History = forwardRef((_, ref) => {
       if (!Array.isArray(data)) {
         throw new Error("Invalid response format: expected an array");
       }
+
+      data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       
       setHistory(data);
     } catch (error) {
