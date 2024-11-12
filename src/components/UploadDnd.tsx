@@ -26,7 +26,6 @@ function UploadDnd() {
       "image/jpg",
       "image/gif",
       "image/webp",
-      "image/avif",
       "image/heic",
       "image/tiff",
       "image/bmp",
