@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-
   const { imageUrl, theme, room } = await request.json();
 
   // POST request to Replicate to start the image restoration generation process
@@ -14,18 +13,13 @@ export async function POST(request: Request) {
     body: JSON.stringify({
       version:
         "854e8727697a057c525cdb45ab037f64ecca770a1769cc52287c2e56472a247b",
-        input: {
-          image: imageUrl,
-          prompt:
-          room === "Gaming Room"
-            ? "a room for gaming with gaming computers, gaming consoles, and gaming chairs"
-            : `a ${theme.toLowerCase()} ${room.toLowerCase()}`,
-          a_prompt: `A photo of a ${theme} ${room}, 4k photo, best quality, highly detailed, stylish furniture, intricate textures, sharp focus, realistic shadows, and photorealistic lighting`,
-          n_prompt:
-        "blurry, cartoonish, illustration, surreal, people, humans, distorted, lowres, bad anatomy, extra limbs, missing fingers, low quality, watermark, logo, text, abstract, overexposed, grainy, poorly framed, over-saturated, unnatural lighting, artificial elements, HDR",
-
+      input: {
+        image: imageUrl,
+        prompt: `A photo of a ${theme} ${room}, 4k photo, highly detailed, stylish furniture, intricate textures, sharp focus, realistic shadows, and photorealistic lighting`,
+        n_prompt:
+          "blurry, cartoonish, illustration, surreal, people, humans, distorted, lowres, bad anatomy, extra limbs, missing fingers, low quality, watermark, logo, text, abstract, overexposed, grainy, poorly framed, over-saturated, unnatural lighting, artificial elements, HDR",
       },
-    }), 
+    }),
   });
 
   let jsonStartResponse = await startResponse.json();
@@ -34,8 +28,11 @@ export async function POST(request: Request) {
 
   // GET request to get the status of the image restoration process & return the result when it's ready
   let restoredImage: string | null = null;
-  while (!restoredImage) {
-    // Loop in 1s intervals until the alt text is ready
+  let retries = 0;
+  const maxRetries = 60; // 60 retries, 1 minute total
+
+  while (!restoredImage && retries < maxRetries) {
+    // Loop in 1s intervals until the alt text is ready or the max retries is reached
     console.log("polling for result...");
     let finalResponse = await fetch(endpointUrl, {
       method: "GET",
@@ -44,6 +41,14 @@ export async function POST(request: Request) {
         Authorization: "Token " + process.env.REPLICATE_API_KEY,
       },
     });
+
+    if (finalResponse.status === 504) {
+      // Retry after 1 second
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      retries++;
+      continue;
+    }
+
     let jsonFinalResponse = await finalResponse.json();
 
     if (jsonFinalResponse.status === "succeeded") {
@@ -52,10 +57,13 @@ export async function POST(request: Request) {
       break;
     } else {
       await new Promise((resolve) => setTimeout(resolve, 1000));
+      retries++;
     }
   }
 
-  return NextResponse.json(
-    restoredImage ? restoredImage : "Failed to restore image"
-  );
+  if (!restoredImage) {
+    return NextResponse.json("Failed to restore image");
+  }
+
+  return NextResponse.json(restoredImage);
 }
