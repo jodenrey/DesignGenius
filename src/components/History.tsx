@@ -213,14 +213,24 @@ const History = forwardRef((_, ref) => {
                   )}
                 </button>
               </div>
-              <div className="relative w-full h-48 overflow-hidden rounded-lg shadow-lg">
-                <Image
-                  src={entry.imageUrl}
-                  width={300}
-                  height={200}
-                  alt="Room Design"
-                  className="object-cover"
-                />
+              <div
+                className={`relative w-full ${
+                  entry.imageUrl.length > 1000 ? "h-auto" : "h-48"
+                } overflow-hidden rounded-lg shadow-lg`}
+              >
+                <div
+                  className={`flex justify-center ${
+                    entry.imageUrl.length > 1000 ? "h-auto" : "h-48"
+                  }`}
+                >
+                  <Image
+                    src={entry.imageUrl}
+                    width={entry.imageUrl.length > 1000 ? 600 : 300}
+                    height={entry.imageUrl.length > 1000 ? 400 : 200}
+                    alt="Room Design"
+                    className="object-cover"
+                  />
+                </div>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center">
                 <Calendar className="w-4 h-4 mr-2" />
