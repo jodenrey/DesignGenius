@@ -60,6 +60,7 @@ const SelectInp = () => {
         options={options}
         defaultValue={options[0]}
         styles={customStyles}
+        instanceId="unique-id" 
       />
     </div>
   )
