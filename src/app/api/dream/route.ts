@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       version:
-        "854e8727697a057c525cdb45ab037f64ecca770a1769cc52287c2e56472a247b",
+        "f967b165f4cd2e151d11e7450a8214e5d22ad2007f042f2f891ca3981dbfba0d",
       input: {
         image: imageUrl,
         prompt: `A photo of a ${theme} ${room}, 4k photo, highly detailed, stylish furniture, intricate textures, sharp focus, realistic shadows, and photorealistic lighting`,
