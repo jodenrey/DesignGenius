@@ -294,29 +294,34 @@ const AboutPage = () => {
             </motion.form>
           </div>
     <div className="bg-gray-900 p-8 rounded-lg shadow-lg flex flex-col justify-between">
-      <div className="space-y-6 mb-6">
-        <motion.div
-          className="flex items-center space-x-4"
-          whileHover={{ scale: 1.05 }}
-        >
-          <FaEnvelope className="text-2xl text-[#C87616]" />
-          <span className="text-white">designgeniusonline@gmail.com</span>
-        </motion.div>
-        <motion.div
-          className="flex items-center space-x-4"
-          whileHover={{ scale: 1.05 }}
-        >
-          <FaPhone className="text-2xl text-[#C87616]" />
-          <span className="text-white">+63 9123456789</span>
-        </motion.div>
-        <motion.div
-          className="flex items-start space-x-4"
-          whileHover={{ scale: 1.05 }}
-        >
-          <FaMapMarkerAlt className="text-2xl text-[#C87616] mt-1" />
-          <span className="text-white text-left">STI Academic Center, Quirino Highway, Tungkong Mangga, San Jose Del Monte City, 3023 Bulacan</span>
-        </motion.div>
-      </div>
+    <div className="space-y-6 mb-6">
+  <motion.div
+    className="flex items-center space-x-4"
+    whileHover={{ scale: 1.05 }}
+  >
+    <FaEnvelope className="text-xl sm:text-2xl text-[#C87616]" />
+    <span className="text-sm sm:text-base md:text-lg text-white">designgeniusonline@gmail.com</span>
+  </motion.div>
+  
+  <motion.div
+    className="flex items-center space-x-4"
+    whileHover={{ scale: 1.05 }}
+  >
+    <FaPhone className="text-xl sm:text-2xl text-[#C87616]" />
+    <span className="text-sm sm:text-base md:text-lg text-white">+63 9123456789</span>
+  </motion.div>
+  
+  <motion.div
+    className="flex items-start space-x-4"
+    whileHover={{ scale: 1.05 }}
+  >
+    <FaMapMarkerAlt className="text-xl sm:text-2xl text-[#C87616] mt-1" />
+    <span className="text-sm sm:text-base md:text-lg text-white text-left">
+      STI Academic Center, Quirino Highway, Tungkong Mangga, San Jose Del Monte City, 3023 Bulacan
+    </span>
+  </motion.div>
+</div>
+
       <div className="w-full h-64 rounded-lg overflow-hidden">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3857.826030818503!2d121.07189187592844!3d14.778827072686695!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397af51766d26a3%3A0x30d0764cb84cc80!2sSTI%20Academic%20Center%20San%20Jose%20Del%20Monte!5e0!3m2!1sen!2sph!4v1728659744109!5m2!1sen!2sph"

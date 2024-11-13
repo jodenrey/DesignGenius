@@ -123,9 +123,7 @@ const Page = () => {
               </h3>
               <ThemeOptions />
             </motion.div>
-
-           
-
+            
             <GenerateBtn
               onGenerateComplete={() => {
                 fetchCredits();
