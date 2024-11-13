@@ -3,6 +3,8 @@ import { useImage, useLoading, useOutput, useRoom, useTheme } from '@/store/useS
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import SubscriptionModal from "./SubscriptionPopup";
+import Swal from 'sweetalert2';
+
 
 const GenerateBtn = ({ onGenerateComplete }: { onGenerateComplete: () => void }) => {
   const imageUrl = useImage((state: any) => state.imageUrl);
@@ -37,11 +39,11 @@ const GenerateBtn = ({ onGenerateComplete }: { onGenerateComplete: () => void })
   async function handleClick() {
     if (isProcessing || userCredits < 1) return; // Prevent clicks if processing or credits are insufficient
     setIsProcessing(true); // Disable button during processing
-
+  
     if (imageUrl && theme && room) { // Check if imageUrl, theme, and room are present
       setLoading(true);
       setGenerating(true);
-
+  
       try {
         // Step 1: Fetch the /api/dream endpoint
         const dreamResponse = await fetch('/api/dream', {
@@ -55,17 +57,22 @@ const GenerateBtn = ({ onGenerateComplete }: { onGenerateComplete: () => void })
             imageUrl,
           }),
         });
-
+  
         if (!dreamResponse.ok) {
-          console.error('Error fetching dream:', dreamResponse.statusText);
+          if (dreamResponse.status === 504) {
+            showErrorModal('The request timed out. Please check your connection and try again.');
+          } else {
+            console.error('Error fetching dream:', dreamResponse.statusText);
+            showErrorModal('An error occurred while generating the room. Please try again later.');
+          }
           setLoading(false);
           setGenerating(false);
           return;
         }
-
+  
         const newPhoto = await dreamResponse.json();
         setOutput(newPhoto[1]);
-
+  
         await fetch("/api/history/save", {
           method: "POST",
           headers: {
@@ -73,7 +80,7 @@ const GenerateBtn = ({ onGenerateComplete }: { onGenerateComplete: () => void })
           },
           body: JSON.stringify({ imageUrl: newPhoto[1] }),
         });
-
+  
         // Step 2: Deduct user credits
         const deductResponse = await fetch(`/api/user/${userId}/deduct-credits`, {
           method: 'POST',
@@ -82,18 +89,20 @@ const GenerateBtn = ({ onGenerateComplete }: { onGenerateComplete: () => void })
           },
           body: JSON.stringify({ amount: 1 }), // Deduct 1 credit
         });
-
+  
         if (deductResponse.ok) {
           const updatedUser = await deductResponse.json();
           setUserCredits(updatedUser.credits); // Update user credits from the response
-
+  
           // Step 3: Notify parent component
           onGenerateComplete(); // Notify parent to refresh credits in real-time
         } else {
           console.error('Failed to deduct credits:', deductResponse.statusText);
+          showErrorModal('An error occurred while deducting credits. Please try again later.');
         }
       } catch (error) {
         console.error('Error while fetching:', error);
+        showErrorModal('An error occurred while generating the room. Please try again later.');
       } finally {
         setLoading(false);
         setGenerating(false);
@@ -106,7 +115,18 @@ const GenerateBtn = ({ onGenerateComplete }: { onGenerateComplete: () => void })
       }
     }
   }
-
+  
+  function showErrorModal(message: string) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: message,
+      confirmButtonColor: '#FF7A00',
+      customClass: {
+        confirmButton: 'px-4 py-2 bg-orange-700 text-white rounded-md hover:bg-orange-800 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2',
+      },
+    });
+  }
   const isButtonDisabled = !imageUrl || !theme || !room || isProcessing || userCredits < 1;
 
   return (
