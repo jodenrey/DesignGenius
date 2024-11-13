@@ -169,7 +169,7 @@ const History = forwardRef((_, ref) => {
     {/* Left aligned "Select All" */}
     <button
       onClick={toggleSelectAll}
-      className="flex items-center px-3 py-2 rounded text-gray-700 hover:text-gray-900"
+      className="flex items-center px-3 py-2 rounded"
     >
       {selectedItems.size === history.length ? (
         <CheckSquare className="w-5 h-5 mr-2" />
