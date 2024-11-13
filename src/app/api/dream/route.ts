@@ -47,7 +47,7 @@ export async function POST(request: Request) {
   // Step 2: Poll the status of the image restoration process
   let restoredImage: string | null = null;
   let retries = 0;
-  const maxRetries = 100; // Maximum retries (1 minute max)
+  const maxRetries = 60; // Maximum retries (1 minute max)
   let retryDelay = 1000; // Start with 1 second delay for retries
 
   while (!restoredImage && retries < maxRetries) {
