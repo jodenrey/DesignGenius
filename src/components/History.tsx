@@ -162,40 +162,41 @@ const History = forwardRef((_, ref) => {
 
   return (
     <div className="history-page">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Your design history</h2>
-        <div className="flex items-center space-x-4">
-          <button
-            onClick={toggleSelectAll}
-            className="flex items-center px-3 py-2  rounded"
-          >
-            {selectedItems.size === history.length ? (
-              <CheckSquare className="w-5 h-5 mr-2" />
-            ) : (
-              <Square className="w-5 h-5 mr-2" />
-            )}
-            Select All
-          </button>
-          {selectedItems.size > 0 && (
-            <div className="flex space-x-2">
-              <button
-                onClick={handleBulkDownload}
-                className="flex items-center px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                <Download className="w-5 h-5 mr-2" />
-                Download 
-              </button>
-              <button
-                onClick={() => openDeleteModal(Array.from(selectedItems)[0], "", true)}
-                className="flex items-center px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-              >
-                <Trash2 className="w-5 h-5 mr-2" />
-                Delete 
-              </button>
-            </div>
-          )}
-        </div>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-2 sm:space-y-0">
+  <h2 className="text-xl sm:text-2xl font-bold text-center sm:text-left">Your design history</h2>
+  <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+    <button
+      onClick={toggleSelectAll}
+      className="flex items-center justify-center px-3 py-2 rounded bg-gray-200 hover:bg-gray-300"
+    >
+      {selectedItems.size === history.length ? (
+        <CheckSquare className="w-5 h-5 mr-2" />
+      ) : (
+        <Square className="w-5 h-5 mr-2" />
+      )}
+      <span className="text-sm sm:text-base">Select All</span>
+    </button>
+    {selectedItems.size > 0 && (
+      <div className="flex space-x-2">
+        <button
+          onClick={handleBulkDownload}
+          className="flex items-center justify-center px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          <Download className="w-5 h-5 mr-2" />
+          <span className="text-sm sm:text-base">Download</span>
+        </button>
+        <button
+          onClick={() => openDeleteModal(Array.from(selectedItems)[0], "", true)}
+          className="flex items-center justify-center px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+        >
+          <Trash2 className="w-5 h-5 mr-2" />
+          <span className="text-sm sm:text-base">Delete</span>
+        </button>
       </div>
+    )}
+  </div>
+</div>
+
 
       <div className="history-scroll-container max-h-[600px] overflow-y-auto">
         <div className="history-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
