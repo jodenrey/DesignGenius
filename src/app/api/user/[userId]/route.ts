@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma'; // Adjust the path according to your setup
 
 // API route to fetch user credits
-export async function GET(req: Request, { params }: { params: { userId: string } }) {
+export async function GET(req: Request, props: { params: Promise<{ userId: string }> }) {
+  const params = await props.params;
   const { userId } = params;
 
   try {

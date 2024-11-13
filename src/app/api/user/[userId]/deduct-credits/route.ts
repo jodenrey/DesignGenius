@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma'; // Adjust the path according to your setup
 
-export async function POST(req: Request, { params }: { params: { userId: string } }) {
+export async function POST(req: Request, props: { params: Promise<{ userId: string }> }) {
+    const params = await props.params;
     const { userId } = params;
     const { amount } = await req.json(); // Get the amount to deduct
 
