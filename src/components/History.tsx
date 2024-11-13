@@ -164,10 +164,12 @@ const History = forwardRef((_, ref) => {
     <div className="history-page">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-2 sm:space-y-0">
   <h2 className="text-xl sm:text-2xl font-bold text-center sm:text-left">Your design history</h2>
-  <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+  
+  <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full sm:w-auto">
+    {/* Left aligned "Select All" */}
     <button
       onClick={toggleSelectAll}
-      className="flex items-center justify-center px-3 py-2 rounded bg-gray-200 hover:bg-gray-300"
+      className="flex items-center px-3 py-2 rounded text-gray-700 hover:text-gray-900"
     >
       {selectedItems.size === history.length ? (
         <CheckSquare className="w-5 h-5 mr-2" />
@@ -176,18 +178,20 @@ const History = forwardRef((_, ref) => {
       )}
       <span className="text-sm sm:text-base">Select All</span>
     </button>
+    
+    {/* Right aligned "Download" and "Delete" */}
     {selectedItems.size > 0 && (
-      <div className="flex space-x-2">
+      <div className="flex space-x-2 mt-2 sm:mt-0 sm:ml-auto">
         <button
           onClick={handleBulkDownload}
-          className="flex items-center justify-center px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="flex items-center px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
         >
           <Download className="w-5 h-5 mr-2" />
           <span className="text-sm sm:text-base">Download</span>
         </button>
         <button
           onClick={() => openDeleteModal(Array.from(selectedItems)[0], "", true)}
-          className="flex items-center justify-center px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          className="flex items-center px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
         >
           <Trash2 className="w-5 h-5 mr-2" />
           <span className="text-sm sm:text-base">Delete</span>
