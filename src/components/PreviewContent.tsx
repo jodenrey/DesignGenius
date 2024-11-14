@@ -39,7 +39,7 @@ const PreviewContent = () => {
                 Generating...
               </p>
               <p className="text-sm opacity-80 animate-fade-in-delay">
-                This may take up to 30 seconds. Thank you for your patience!
+                This may take up to 45 seconds. Thank you for your patience!
               </p>
             </div>
           )}
