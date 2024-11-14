@@ -20,8 +20,6 @@ export async function POST(request: Request) {
             ? "a room for gaming with gaming computers, gaming consoles, and gaming chairs"
             : `a ${theme.toLowerCase()} ${room.toLowerCase()}`,
             a_prompt: `4k photo, highly detailed, extremely detailed, stylish furniture, intricate textures, sharp focus, realistic shadows, and photorealistic lighting`,
-            n_prompt:
-              "blurry, cartoonish, illustration, surreal, people, humans, distorted, lowres, bad anatomy, extra limbs, missing fingers, low quality, watermark, logo, text, abstract, overexposed, grainy, poorly framed, over-saturated, unnatural lighting, artificial elements, HDR",
       },
     }),
   });
