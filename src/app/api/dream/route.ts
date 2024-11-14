@@ -20,6 +20,7 @@ export async function POST(request: Request) {
             ? "a room for gaming with gaming computers, gaming consoles, and gaming chairs"
             : `a ${theme.toLowerCase()} ${room.toLowerCase()}`,
             a_prompt: `4k photo, highly detailed, extremely detailed, stylish furniture, intricate textures, sharp focus, realistic shadows, and photorealistic lighting`,
+            n_prompt: 'anime, cartoon, graphic, text, painting, crayon, abstract, glitch, deformed, mutated, ugly, disfigured'
       },
     }),
   });
