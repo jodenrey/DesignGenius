@@ -1,6 +1,6 @@
 // src/lib/userCheck.ts
 import { prisma } from "@/lib/prisma";
-import { currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 
 export async function ensureUserInDatabase(userId: string) {
   const user = await currentUser();

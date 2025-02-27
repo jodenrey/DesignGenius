@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 
 export async function POST(req: Request) {
-  const { userId } = auth();
+  const { userId } = await auth();
   const { imageIds } = await req.json(); // Parse JSON body to get array of image IDs
 
   if (!userId || !Array.isArray(imageIds) || imageIds.length === 0) {

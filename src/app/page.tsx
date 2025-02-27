@@ -1,7 +1,7 @@
 'use client'
 import CompareSlider from "@/components/CompareSlider";
 import Link from "next/link";
-import { useUser, SignInButton } from '@clerk/nextjs'
+import { useUser, SignInButton } from '@clerk/nextjs';
 
 export default function Home() {
   const { isSignedIn, isLoaded } = useUser();
@@ -12,7 +12,7 @@ export default function Home() {
         <h1 className="text-black text-5xl font-extrabold text-center">
           REDESIGNS ROOM IN SECONDS USING{" "}
           <span className="rounded-full bg-red-500 relative inline-flex text-transparent bg-clip-text bg-gradient-to-r from-black to-[#C87616]">
-          <span className="absolute inset-0 bg-gradient-to-r from-black to-[#C87616] rounded-2xl blur-[2px]"></span>
+            <span className="absolute inset-0 bg-gradient-to-r from-black to-[#C87616] rounded-2xl blur-[2px]"></span>
             <span className="relative z-10 text-white p-2 font-sm">DESIGNGENIUS</span>
           </span>
         </h1>
@@ -27,7 +27,7 @@ export default function Home() {
               </button>
             </Link>
           ) : (
-            <SignInButton mode="modal" redirectUrl="/room">
+            <SignInButton mode="modal" fallbackRedirectUrl="/room">
               <button className="bg-black hover:opacity-90 rounded-lg text-white font-semibold px-5 py-3">
                 Redesign your room
               </button>

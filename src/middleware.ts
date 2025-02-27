@@ -1,40 +1,46 @@
-import { authMiddleware } from "@clerk/nextjs";
-import { NextResponse } from "next/server";
+import { clerkMiddleware, clerkClient } from '@clerk/nextjs/server';
+import { NextResponse, type NextRequest } from 'next/server';
 
-export default authMiddleware({
-  async afterAuth(auth, req) {
-    // If no user is authenticated, just pass the request
-    if (!auth.userId) {
-      return NextResponse.next();
-    }
+export default clerkMiddleware(async (auth, req: NextRequest) => {
+  const { userId } = await auth();
 
-    const email = auth.user?.emailAddresses[0]?.emailAddress || null;
-
-    // If email is required, handle missing email case
-    if (!email) {
-      console.warn("No email found for user:", auth.userId);
-      return NextResponse.next(); // Or handle it differently if required
-    }
-
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user-initialization`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: auth.userId,
-        email,
-      }),
-    });
-
-    if (!res.ok) {
-      console.error("Error registering user in middleware:", res.statusText);
-    }
-
+  if (!userId) {
     return NextResponse.next();
-  },
+  }
+
+  // Call clerkClient() to get the client instance
+  const clerk = await clerkClient();
+  const user = await clerk.users.getUser(userId);
+  const email = user?.emailAddresses?.[0]?.emailAddress || null;
+
+  if (!email) {
+    console.warn("No email found for user:", userId);
+    return NextResponse.next();
+  }
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user-initialization`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      userId,
+      email,
+    }),
+  });
+
+  if (!res.ok) {
+    console.error("Error registering user in middleware:", res.statusText);
+  }
+
+  return NextResponse.next();
 });
 
 export const config = {
-  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)",'/room'],
+  matcher: [
+    "/((?!.+\\.[\\w]+$|_next).*)",
+    "/",
+    "/(api|trpc)(.*)",
+    "/room"
+  ],
 };

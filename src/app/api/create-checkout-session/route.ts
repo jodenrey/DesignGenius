@@ -1,6 +1,6 @@
 // src/app/api/create-checkout-session/route.ts
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import Stripe from 'stripe';
 import { ensureUserInDatabase } from "@/lib/userCheck"; // Import the user check
@@ -10,7 +10,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export async function POST(req: Request) {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     return NextResponse.redirect('/sign-in');

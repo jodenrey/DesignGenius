@@ -13,8 +13,8 @@
     "@bytescale/upload-widget": "^4.27.0",
     "@bytescale/upload-widget-react": "^4.13.0",
     "@clerk/clerk-sdk-node": "^5.0.38",
-    "@clerk/nextjs": "^4.31.5",
-    "@headlessui/react": "^2.1.8",
+    "@clerk/nextjs": "^6.12.1",
+    "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.1.5",
     "@libsql/client": "^0.14.0",
     "@neondatabase/serverless": "^0.9.5",
@@ -28,8 +28,6 @@
     "@upstash/redis": "^1.34.0",
     "aos": "^2.3.4",
     "crisp-sdk-web": "^1.0.25",
-    "firebase": "^10.13.1",
-    "firebase-admin": "^12.5.0",
     "framer-motion": "^11.9.0",
     "gsap": "^3.12.5",
     "lucide-react": "^0.446.0",
@@ -49,7 +47,7 @@
     "react-use-downloader": "^1.2.8",
     "replicate": "^0.22.0",
     "stripe": "^16.12.0",
-    "sweetalert2": "^11.14.5",
+    "sweetalert2": "^11.6.13",
     "zustand": "^4.4.7"
   },
   "devDependencies": {

@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 
 // Handle POST requests
 export async function POST(req: Request) {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   // Check if the user is authenticated
   if (!userId) {

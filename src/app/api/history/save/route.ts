@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 
 // This handles POST requests
 export async function POST(req: Request) {
-  const { userId } = auth();
+  const { userId } = await auth();
   const { imageUrl } = await req.json(); // Parse JSON body
 
   if (!userId || !imageUrl) {

@@ -15,10 +15,8 @@ function UploadDnd() {
   const [userCredits, setUserCredits] = useState<number>(0);
   const { userId, isSignedIn } = useAuth();
 
-  const options: UploadWidgetConfig = {
-    apiKey: !!process.env.NEXT_PUBLIC_UPLOAD_API_KEY
-      ? process.env.NEXT_PUBLIC_UPLOAD_API_KEY
-      : "free",
+  const options = {
+    apiKey: process.env.NEXT_PUBLIC_UPLOAD_API_KEY || "free",
     maxFileCount: 1,
     mimeTypes: [
       "image/jpeg",
@@ -46,7 +44,7 @@ function UploadDnd() {
         shade900: "#ffff",
       },
     },
-  };
+  } as any;
 
   const fetchUserCredits = async () => {
     if (isSignedIn && userId) {
