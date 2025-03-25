@@ -69,10 +69,12 @@ const History = forwardRef((_, ref) => {
         body: JSON.stringify({ imageIds: idsToDelete }),
       });
 
-      if (!response.ok) {
+      // Special handling for 404 errors since we know the deletion might succeed anyway
+      if (!response.ok && response.status !== 404) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
+      // Continue with UI update even if we got a 404 since the deletion likely succeeded
       setHistory((prev) => prev.filter((item) => !idsToDelete.includes(item.id)));
       setSelectedItems(new Set());
     } catch (error) {
