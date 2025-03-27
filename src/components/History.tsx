@@ -1,9 +1,21 @@
-import React, { useEffect, useState, forwardRef, useImperativeHandle } from "react";
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle
+} from "react";
 import Image from "next/image";
 import { useAuth } from "@clerk/nextjs";
 import ConfirmDelete from "@/components/ConfirmDelete";
 import useDownloader from "react-use-downloader";
-import { Download, Trash2, Calendar, Loader2, CheckSquare, Square } from "lucide-react";
+import {
+  Download,
+  Trash2,
+  Calendar,
+  Loader2,
+  CheckSquare,
+  Square
+} from "lucide-react";
 
 interface HistoryEntry {
   id: string;
@@ -29,23 +41,30 @@ const History = forwardRef((_, ref) => {
       setIsLoading(true);
       setError(null);
       const response = await fetch("/api/history/get");
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const data = await response.json();
-      
+
       if (!Array.isArray(data)) {
         throw new Error("Invalid response format: expected an array");
       }
 
-      data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-      
+      data.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
+      console.log(data);
+
       setHistory(data);
     } catch (error) {
       console.error("Error fetching history:", error);
-      setError(error instanceof Error ? error.message : "Failed to fetch history");
+      setError(
+        error instanceof Error ? error.message : "Failed to fetch history"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -56,17 +75,19 @@ const History = forwardRef((_, ref) => {
   }, [userId]);
 
   useImperativeHandle(ref, () => ({
-    fetchHistory,
+    fetchHistory
   }));
 
   const handleDelete = async () => {
     try {
-      const idsToDelete = isBulkDelete ? Array.from(selectedItems) : [selectedImageId];
-      
+      const idsToDelete = isBulkDelete
+        ? Array.from(selectedItems)
+        : [selectedImageId];
+
       const response = await fetch("/api/history/delete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ imageIds: idsToDelete }),
+        body: JSON.stringify({ imageIds: idsToDelete })
       });
 
       // Special handling for 404 errors since we know the deletion might succeed anyway
@@ -75,7 +96,9 @@ const History = forwardRef((_, ref) => {
       }
 
       // Continue with UI update even if we got a 404 since the deletion likely succeeded
-      setHistory((prev) => prev.filter((item) => !idsToDelete.includes(item.id)));
+      setHistory((prev) =>
+        prev.filter((item) => !idsToDelete.includes(item.id))
+      );
       setSelectedItems(new Set());
     } catch (error) {
       console.error("Error deleting images:", error);
@@ -86,7 +109,11 @@ const History = forwardRef((_, ref) => {
     }
   };
 
-  const openDeleteModal = (imageId: string, imageUrl: string, isBulk: boolean = false) => {
+  const openDeleteModal = (
+    imageId: string,
+    imageUrl: string,
+    isBulk: boolean = false
+  ) => {
     setSelectedImageId(imageId);
     setSelectedImageUrl(imageUrl);
     setIsBulkDelete(isBulk);
@@ -101,17 +128,20 @@ const History = forwardRef((_, ref) => {
   };
 
   const fileName = (length: number) => {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    return Array.from({ length }, () => 
-      characters.charAt(Math.floor(Math.random() * characters.length))
-    ).join('') + '.jpg';
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    return (
+      Array.from({ length }, () =>
+        characters.charAt(Math.floor(Math.random() * characters.length))
+      ).join("") + ".jpg"
+    );
   };
 
   const toggleSelectAll = () => {
     if (selectedItems.size === history.length) {
       setSelectedItems(new Set());
     } else {
-      setSelectedItems(new Set(history.map(item => item.id)));
+      setSelectedItems(new Set(history.map((item) => item.id)));
     }
   };
 
@@ -126,11 +156,15 @@ const History = forwardRef((_, ref) => {
   };
 
   const handleBulkDownload = async () => {
-    const selectedImages = history.filter(item => selectedItems.has(item.id));
+    const selectedImages = history.filter((item) => selectedItems.has(item.id));
     for (const image of selectedImages) {
       await download(image.imageUrl, fileName(10));
     }
   };
+
+  useEffect(() => {
+    console.log(history);
+  }, [history]);
 
   if (isLoading) {
     return (
@@ -144,7 +178,7 @@ const History = forwardRef((_, ref) => {
     return (
       <div className="text-center p-4 text-red-500">
         <p>Error: {error}</p>
-        <button 
+        <button
           onClick={fetchHistory}
           className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
         >
@@ -165,44 +199,47 @@ const History = forwardRef((_, ref) => {
   return (
     <div className="history-page">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-2 sm:space-y-0">
-  <h2 className="text-xl sm:text-2xl font-bold text-center sm:text-left">Your design history</h2>
-  
-  <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full sm:w-auto">
-    {/* Left aligned "Select All" */}
-    <button
-      onClick={toggleSelectAll}
-      className="flex items-center px-3 py-2 rounded"
-    >
-      {selectedItems.size === history.length ? (
-        <CheckSquare className="w-5 h-5 mr-2" />
-      ) : (
-        <Square className="w-5 h-5 mr-2" />
-      )}
-      <span className="text-sm sm:text-base">Select All</span>
-    </button>
-    
-    {/* Right aligned "Download" and "Delete" */}
-    {selectedItems.size > 0 && (
-      <div className="flex space-x-2 mt-2 sm:mt-0 sm:ml-auto">
-        <button
-          onClick={handleBulkDownload}
-          className="flex items-center px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          <Download className="w-5 h-5 mr-2" />
-          <span className="text-sm sm:text-base">Download</span>
-        </button>
-        <button
-          onClick={() => openDeleteModal(Array.from(selectedItems)[0], "", true)}
-          className="flex items-center px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-        >
-          <Trash2 className="w-5 h-5 mr-2" />
-          <span className="text-sm sm:text-base">Delete</span>
-        </button>
-      </div>
-    )}
-  </div>
-</div>
+        <h2 className="text-xl sm:text-2xl font-bold text-center sm:text-left">
+          Your design history
+        </h2>
 
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full sm:w-auto">
+          {/* Left aligned "Select All" */}
+          <button
+            onClick={toggleSelectAll}
+            className="flex items-center px-3 py-2 rounded"
+          >
+            {selectedItems.size === history.length ? (
+              <CheckSquare className="w-5 h-5 mr-2" />
+            ) : (
+              <Square className="w-5 h-5 mr-2" />
+            )}
+            <span className="text-sm sm:text-base">Select All</span>
+          </button>
+
+          {/* Right aligned "Download" and "Delete" */}
+          {selectedItems.size > 0 && (
+            <div className="flex space-x-2 mt-2 sm:mt-0 sm:ml-auto">
+              <button
+                onClick={handleBulkDownload}
+                className="flex items-center px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                <Download className="w-5 h-5 mr-2" />
+                <span className="text-sm sm:text-base">Download</span>
+              </button>
+              <button
+                onClick={() =>
+                  openDeleteModal(Array.from(selectedItems)[0], "", true)
+                }
+                className="flex items-center px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              >
+                <Trash2 className="w-5 h-5 mr-2" />
+                <span className="text-sm sm:text-base">Delete</span>
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
 
       <div className="history-scroll-container max-h-[600px] overflow-y-auto">
         <div className="history-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -270,9 +307,10 @@ const History = forwardRef((_, ref) => {
         onClose={closeDeleteModal}
         onConfirm={handleDelete}
         imageUrl={!isBulkDelete ? selectedImageUrl : null}
-        message={isBulkDelete 
-          ? `Are you sure you want to delete ${selectedItems.size} selected images?` 
-          : "Are you sure you want to delete this image?"
+        message={
+          isBulkDelete
+            ? `Are you sure you want to delete ${selectedItems.size} selected images?`
+            : "Are you sure you want to delete this image?"
         }
       />
     </div>
