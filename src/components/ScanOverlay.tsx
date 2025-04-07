@@ -87,7 +87,7 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
   const [isVisible, setIsVisible] = useState(false);
   // States for product scanning functionality
   const [scanningStage, setScanningStage] = useState<
-    "initial" | "scanning" | "furniture-list" | "furniture-detail" | "results"
+    "initial" | "scanning" | "furniture-list" | "results"
   >("initial");
   const [detectedFurniture, setDetectedFurniture] = useState<FurnitureWithMetadata[]>([]);
   const [selectedFurniture, setSelectedFurniture] = useState<FurnitureWithMetadata | null>(null);
@@ -116,9 +116,9 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
     }
   }, [isOpen, isVisible]);
 
-  // New effect to update container dimensions when needed
+  // Effect to update container dimensions when needed
   useEffect(() => {
-    if (scanningStage === "furniture-list" && imageContainerRef.current) {
+    if ((scanningStage === "furniture-list" || scanningStage === "results") && imageContainerRef.current) {
       const updateDimensions = () => {
         if (imageContainerRef.current) {
           setContainerDimensions({
@@ -185,7 +185,15 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
       const data = await response.json();
       setScanProgress(100);
       
+      // Log the furniture data for debugging
+      console.log("Furniture detection data:", data);
+      
       if (data?.furnitures && Array.isArray(data.furnitures)) {
+        // Log the first furniture item to check coordinates
+        if (data.furnitures.length > 0) {
+          console.log("First furniture item:", data.furnitures[0]);
+        }
+        
         setDetectedFurniture(data.furnitures.map((furniture: any, index: number) => ({
           ...furniture,
           id: `furniture-${index}`
@@ -206,7 +214,7 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
   const handleFurnitureSelect = async (furniture: FurnitureWithMetadata) => {
     setSelectedFurniture(furniture);
     setIsLoading(true);
-    setScanningStage("furniture-detail");
+    setScanningStage("results");
     setError(null);
     
     try {
@@ -244,8 +252,6 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
           setSimilarProducts([]);
         }
       }
-      
-      setScanningStage("results");
     } catch (err: any) {
       setError(err.message || "An error occurred while analyzing furniture");
       console.error("Furniture detail error:", err);
@@ -267,75 +273,60 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
   if (!isVisible) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity duration-300 ease-in-out"
-      style={{ opacity: isAnimatingOut ? 0 : 1 }}
-    >
-      {/* Modal Container */}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm transition-opacity duration-300 ease-in-out"
+      style={{ opacity: isAnimatingOut ? 0 : 1 }}>
+      
+      {/* Add pulse animation style */}
+      <style jsx global>{`
+        @keyframes pulse {
+          0% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7);
+          }
+          
+          70% {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 10px rgba(6, 182, 212, 0);
+          }
+          
+          100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(6, 182, 212, 0);
+          }
+        }
+        
+        .pulse-dot {
+          animation: pulse 2s infinite;
+        }
+      `}</style>
+      
+      {/* Modal container with the background image covering the entire modal */}
       <div
         className={`
-          relative bg-white dark:bg-gray-800 w-full max-w-xl rounded-2xl shadow-xl
-          transition-all duration-300 ease-in-out overflow-hidden
+          relative rounded-xl shadow-2xl overflow-hidden
+          w-[90vw] max-w-6xl h-[80vh] max-h-[900px]
+          ${scanningStage !== "initial" ? "flex flex-col md:flex-row" : ""}
+          transition-all duration-300 ease-in-out
           ${isAnimatingOut ? "scale-95 opacity-0" : "scale-100 opacity-100"}
         `}
       >
-        {/* Image Header */}
-        <div 
-          ref={imageContainerRef}
-          className="relative h-64 md:h-80 rounded-t-2xl overflow-hidden"
-        >
+        {/* Initial stage - full image view only */}
+        {scanningStage === "initial" && (
+          <div className="relative w-full h-full" ref={imageContainerRef}>
           <Image
             src={imageSrc}
-            alt="Room Image"
+              alt="Room Image"
             fill
-            className="object-cover"
+              className="object-contain"
             priority
-          />
-
-          {/* Dark overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-
-          {/* Detected furniture markers - show in furniture-list stage */}
-          {scanningStage === "furniture-list" && detectedFurniture.map((item) => {
-            // Get the original image dimensions from the response data
-            const originalWidth = 512; // assuming this is the width of the source image
-            const originalHeight = 768; // assuming this is the height of the source image
+              unoptimized={true}
+            />
             
-            // Calculate scale factors
-            const scaleX = containerDimensions.width / originalWidth;
-            const scaleY = containerDimensions.height / originalHeight;
-            
-            // Calculate scaled position and dimensions
-            const scaledX = item.plot.x * scaleX;
-            const scaledY = item.plot.y * scaleY;
-            const scaledWidth = item.plot.width * scaleX;
-            const scaledHeight = item.plot.height * scaleY;
-            
-            return (
-              <div
-                key={item.id}
-                className="absolute cursor-pointer group"
-                style={{
-                  left: `${scaledX - scaledWidth/2}px`,
-                  top: `${scaledY - scaledHeight/2}px`,
-                  width: `${scaledWidth}px`,
-                  height: `${scaledHeight}px`
-                }}
-                onClick={() => handleFurnitureSelect(item)}
-              >
-                <div className="absolute inset-0 border-2 border-blue-500 rounded-md bg-blue-500/20 group-hover:bg-blue-500/40 transition-colors"></div>
-                <div className="absolute -top-8 left-0 bg-blue-600 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                  {item.type} ({item.confidence}%)
-                </div>
-              </div>
-            );
-          })}
-
-          {/* Close Button (top-right corner) */}
+            {/* Close button */}
           <button
             type="button"
             onClick={handleClose}
-            className="absolute top-4 right-4 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-all"
+              className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all"
             aria-label="Close"
           >
             <svg
@@ -352,68 +343,8 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
             </svg>
           </button>
 
-          {/* Back button (when in results or furniture-detail stage) */}
-          {(scanningStage === "results" || scanningStage === "furniture-detail") && (
-            <button
-              type="button"
-              onClick={goBackToFurnitureList}
-              className="absolute top-4 left-4 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-all"
-              aria-label="Back"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-          )}
-
-          {/* Stage indicators */}
-          {scanningStage === "furniture-list" && (
-            <div className="absolute bottom-4 left-0 right-0 text-center">
-              <div className="bg-black/70 text-white py-2 px-4 rounded-lg inline-block">
-                Tap on any furniture to identify and get similar products
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Content */}
-        <div className="p-6">
-          <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white flex items-center">
-            <svg
-              className="w-5 h-5 mr-2"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M22 22L16 16"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            {scanningStage === "results" ? "Similar Products" : "Furniture Scanner"}
-          </h3>
-
-          {scanningStage === "initial" && (
-            <div className="flex flex-col items-center justify-center py-4">
+            {/* Start scanning overlay */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40">
               <button
                 onClick={startScanning}
                 className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-medium shadow-lg transition-colors"
@@ -421,204 +352,272 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
               >
                 {isLoading ? "Starting..." : "Start Scanning"}
               </button>
-              <p className="mt-4 text-sm text-gray-600 dark:text-gray-300">
+              <p className="mt-4 text-sm text-white">
                 Scan your room design to identify furniture and find similar products
               </p>
             </div>
-          )}
-
-          {scanningStage === "scanning" && (
-            <div className="flex flex-col items-center justify-center py-4">
-              <div className="relative w-40 h-40 border-2 border-dashed border-blue-500 rounded-lg mb-4">
-                {/* Scanning line animation */}
-                <div
-                  className="absolute left-0 right-0 h-1 bg-blue-500"
-                  style={{ top: `${(scanProgress % 100) * 0.4}%` }}
-                />
-
-                {/* Corner highlights */}
-                <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-blue-500" />
-                <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-blue-500" />
-                <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-blue-500" />
-                <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-blue-500" />
-              </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                {isLoading ? "Analyzing your design..." : "Scanning complete!"}
-              </p>
             </div>
           )}
 
-          {scanningStage === "furniture-list" && (
-            <div>
-              <p className="mb-3 text-gray-600 dark:text-gray-300 text-sm">
-                {detectedFurniture.length > 0
-                  ? `${detectedFurniture.length} items detected. Tap on an item above for details.`
-                  : "No furniture detected. Try scanning again."}
-              </p>
-              
-              <div className="grid grid-cols-2 gap-3 mt-4">
-                {detectedFurniture.map((item) => (
-                  <div
-                    key={item.id}
-                    onClick={() => handleFurnitureSelect(item)}
-                    className="bg-gray-100 dark:bg-gray-700 rounded-lg p-3 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium capitalize">{item.type}</span>
-                      <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 px-2 py-1 rounded">
-                        {item.confidence}%
-                      </span>
-                    </div>
-                    {item.image?.value && (
-                      <div className="relative h-24 w-full rounded overflow-hidden">
-                        <Image
-                          src={`data:image/jpeg;base64,${item.image.value}`}
-                          alt={item.type}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-              
+        {/* Other stages - split view with image and sidebar */}
+        {scanningStage !== "initial" && (
+          <>
+            {/* Left panel - Main image with dots */}
+            <div className="w-full md:w-3/5 h-full relative bg-black flex items-center justify-center overflow-hidden">
+              {/* Close button */}
               <button
-                onClick={startScanning}
-                className="mt-6 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors w-full"
+                type="button"
+                onClick={handleClose}
+                className="absolute top-4 left-4 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all"
+                aria-label="Close"
               >
-                Scan Again
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
               </button>
-            </div>
-          )}
-
-          {scanningStage === "furniture-detail" && selectedFurniture && (
-            <div className="flex flex-col items-center justify-center py-4">
-              <div className="w-full">
-                <h4 className="font-medium text-lg capitalize mb-2">{selectedFurniture.type}</h4>
-                <div className="relative h-40 w-full rounded-lg overflow-hidden mb-4">
-                  {selectedFurniture.image?.value && (
-                    <Image
-                      src={`data:image/jpeg;base64,${selectedFurniture.image.value}`}
-                      alt={selectedFurniture.type}
-                      fill
-                      className="object-contain"
-                    />
-                  )}
-                </div>
-                <div className="flex justify-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                </div>
-                <p className="text-center text-sm text-gray-600 dark:text-gray-300 mt-2">
-                  Analyzing and finding similar products...
-                </p>
-              </div>
-            </div>
-          )}
-
-          {scanningStage === "results" && selectedFurniture && (
-            <div>
-              <div className="mb-4">
-                <h4 className="font-medium capitalize mb-1">{selectedFurniture.type}</h4>
-                {selectedFurniture.description && (
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
-                    {selectedFurniture.description}
-                  </p>
-                )}
-              </div>
               
-              <p className="font-medium text-sm mb-2">Similar Products:</p>
-              
-              {/* Product listings */}
-              <div className="space-y-4 max-h-64 overflow-y-auto">
-                {(similarProducts.length > 0 ? similarProducts : mockProducts).map((product, index) => (
-                  <div
-                    key={product.id || `product-${index}`}
-                    className="flex bg-gray-50 dark:bg-gray-700 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer"
-                    onClick={() => openProductUrl(product.url || product.link)}
-                  >
-                    <div className="w-24 h-24 relative flex-shrink-0">
-                      <Image
-                        src={product.imageUrl || product.thumbnail || "https://via.placeholder.com/100"}
-                        alt={product.name || product.title || "Product"}
-                        fill
-                        className="object-cover"
-                      />
+              {/* Image container */}
+              <div 
+                ref={imageContainerRef}
+                className="relative w-full h-full"
+              >
+                <Image
+                  src={imageSrc}
+                  alt="Room Image"
+                  fill
+                  className="object-contain"
+                  priority
+                  unoptimized={true}
+                />
+                
+                {/* Scanning overlay */}
+                {scanningStage === "scanning" && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40">
+                    <div className="w-20 h-20 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p className="mt-4 text-sm text-white">
+                      {isLoading ? "Analyzing your design..." : "Scanning complete!"}
+                    </p>
+                    {/* Progress bar */}
+                    <div className="w-64 bg-gray-700 rounded-full h-1.5 mt-4">
+                      <div
+                        className="bg-blue-500 h-1.5 rounded-full transition-all duration-300 ease-out"
+                        style={{ width: `${scanProgress}%` }}
+                      ></div>
                     </div>
-                    <div className="p-3 flex-1">
-                      <h4 className="font-medium text-gray-900 dark:text-white text-sm">
-                        {product.name || product.title || "Product Name"}
-                      </h4>
-                      <p className="text-blue-600 dark:text-blue-400 font-bold">
-                        {product.price || product.price_str || "$???"}
-                      </p>
-                      <div className="flex items-center mt-1">
-                        {product.rating && (
-                          <div className="flex">
-                            {[...Array(5)].map((_, i) => (
-                              <svg
-                                key={i}
-                                className={`w-3 h-3 ${
-                                  i < Math.floor(product.rating)
-                                    ? "text-yellow-400"
-                                    : "text-gray-300"
-                                }`}
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                              </svg>
-                            ))}
+                  </div>
+                )}
+
+                {/* Furniture dot markers - show in furniture-list stage */}
+                {scanningStage === "furniture-list" && detectedFurniture.map((item, index) => {
+                  
+                  // Get current container dimensions
+                  const containerWidth = imageContainerRef.current?.clientWidth || 500;
+                  const containerHeight = imageContainerRef.current?.clientHeight || 400;
+                  
+                  // Adjust the original dimensions to match what the API seems to be using
+                  const originalWidth = 768; 
+                  const originalHeight = 768; 
+                  
+                  // Directly use the coordinates from the API
+                  const furnitureX = item.plot.x;
+                  const furnitureY = item.plot.y;
+                  
+                  // Calculate displayed image size with proper aspect ratio preservation
+                  const containerAspectRatio = containerWidth / containerHeight;
+                  const imageAspectRatio = 1; // Using 1:1 aspect ratio based on coordinate patterns
+                  
+                  let displayedWidth, displayedHeight;
+                  if (containerAspectRatio > imageAspectRatio) {
+                    // Container is wider than image
+                    displayedHeight = containerHeight;
+                    displayedWidth = containerHeight * imageAspectRatio;
+                  } else {
+                    // Container is taller than image
+                    displayedWidth = containerWidth;
+                    displayedHeight = containerWidth / imageAspectRatio;
+                  }
+                  
+                  // Margins for centering the image in the container
+                  const marginLeft = (containerWidth - displayedWidth) / 2;
+                  const marginTop = (containerHeight - displayedHeight) / 2;
+                  
+                  // Apply scaling based on how the image is displayed
+                  const scaleFactorX = displayedWidth / originalWidth;
+                  const scaleFactorY = displayedHeight / originalHeight;
+                  
+                  // Final coordinates
+                  const dotX = (furnitureX * scaleFactorX) + marginLeft;
+                  const dotY = (furnitureY * scaleFactorY) + marginTop;
+                  
+                  // For debugging
+                  console.log(`Furniture ${index} (${item.type}): Placing dot at ${Math.round(dotX)},${Math.round(dotY)}`);
+                  
+                  return (
+                    <div
+                      key={item.id}
+                      className="absolute cursor-pointer group z-20"
+                      style={{
+                        left: `${dotX}px`,
+                        top: `${dotY}px`,
+                        transform: 'translate(-50%, -50%)'
+                      }}
+                      onClick={() => handleFurnitureSelect(item)}
+                    >
+                      <div className="w-8 h-8 flex items-center justify-center">
+                        <div className="w-6 h-6 rounded-full bg-cyan-500 border-2 border-white shadow-lg hover:w-7 hover:h-7 transition-all duration-200 pulse-dot"></div>
+                      </div>
+                      <div className="absolute -top-8 left-0 bg-blue-600 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                        {item.type} ({item.confidence}%)
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            
+            {/* Right panel - Product results */}
+            <div className="w-full md:w-2/5 h-full bg-white dark:bg-gray-900 overflow-y-auto">
+              {/* Header */}
+              <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 z-10">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                  {scanningStage === "scanning" && "Scanning..."}
+                  {scanningStage === "furniture-list" && "Detected Furniture"}
+                  {scanningStage === "results" && selectedFurniture && 
+                    `${selectedFurniture.type.charAt(0).toUpperCase() + selectedFurniture.type.slice(1)} Products`}
+                </h2>
+                
+                {scanningStage === "results" && selectedFurniture && (
+                  <button 
+                    onClick={goBackToFurnitureList}
+                    className="mt-2 text-sm text-blue-600 hover:text-blue-800 flex items-center"
+                  >
+                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Back to all furniture
+                  </button>
+                )}
+                
+                {selectedFurniture?.description && scanningStage === "results" && (
+                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                    {selectedFurniture.description}
+                </p>
+              )}
+              </div>
+              
+              {/* Content */}
+              <div className="p-4">
+                {error && (
+                  <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 rounded-lg text-sm">
+                    {error}
+                  </div>
+                )}
+                
+                {scanningStage === "scanning" && (
+                  <div className="text-center py-8">
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Please wait while we analyze your image...
+                    </p>
+                  </div>
+                )}
+                
+                {scanningStage === "furniture-list" && (
+                  <div className="grid grid-cols-2 gap-3">
+                    {detectedFurniture.map((item) => (
+                      <div
+                        key={item.id}
+                        onClick={() => handleFurnitureSelect(item)}
+                        className="bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition-all"
+                      >
+                        {item.image?.value && (
+                          <div className="relative h-32 w-full">
+                            <img
+                              src={`data:image/jpeg;base64,${item.image.value}`}
+                              alt={item.type}
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
                           </div>
                         )}
-                        {product.store && (
-                          <span className="ml-auto text-xs text-gray-500">
-                            {product.store}
-                          </span>
-                        )}
-                        {product.source && (
-                          <span className="ml-auto text-xs text-gray-500">
-                            {product.source}
-                          </span>
-                        )}
+                        <div className="p-2">
+                          <div className="flex items-center justify-between">
+                            <span className="font-medium capitalize text-gray-900 dark:text-white">{item.type}</span>
+                            <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 px-2 py-1 rounded-full">
+                              {item.confidence}%
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                )}
+                
+                {scanningStage === "results" && (
+                  <>
+                    {isLoading ? (
+                      <div className="flex justify-center py-8">
+                        <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 gap-3">
+                        {(similarProducts.length > 0 ? similarProducts : mockProducts).map((product, index) => (
+                          <div
+                            key={product.id || `product-${index}`}
+                            className="bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition-all"
+                            onClick={() => openProductUrl(product.url || product.link)}
+                          >
+                            <div className="relative h-32 w-full">
+                              <img
+                                src={product.imageUrl || product.thumbnail || "https://via.placeholder.com/100"}
+                                alt={product.name || product.title || "Product"}
+                                className="w-full h-full object-cover"
+                                loading="lazy"
+                              />
+                            </div>
+                            <div className="p-2">
+                              <h4 className="font-medium text-gray-900 dark:text-white text-sm line-clamp-1">
+                                {product.name || product.title || "Product Name"}
+                              </h4>
+                              <p className="text-blue-600 dark:text-blue-400 font-bold text-sm">
+                                {product.price || product.price_str || "$???"}
+                              </p>
+                              <div className="flex items-center mt-1">
+                                {product.source && (
+                                  <span className="text-xs text-gray-500">
+                                    {product.source}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+                
+                {scanningStage === "furniture-list" || scanningStage === "results" ? (
+                <button
+                  onClick={startScanning}
+                    className="mt-6 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors w-full"
+                    disabled={isLoading}
+                >
+                  Scan Again
+                </button>
+                ) : null}
             </div>
-          )}
-
-          {/* Error message */}
-          {error && (
-            <div className="mt-4 p-3 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 rounded-lg text-sm">
-              {error}
             </div>
-          )}
-
-          {/* Progress indicator */}
-          {scanningStage === "scanning" && (
-            <div className="w-full bg-gray-200 rounded-full h-1.5 mt-4 dark:bg-gray-700">
-              <div
-                className="bg-blue-600 h-1.5 rounded-full transition-all duration-300 ease-out"
-                style={{ width: `${scanProgress}%` }}
-              ></div>
-            </div>
-          )}
-        </div>
-
-        {/* Footer */}
-        <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700/30 rounded-b-2xl">
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            {scanningStage === "scanning"
-              ? "Our AI is analyzing your design to identify furniture and design elements."
-              : scanningStage === "results"
-              ? "Click on a product to view more details or purchase options."
-              : scanningStage === "furniture-list"
-              ? "Select a furniture item to get product recommendations."
-              : "Start scanning to identify products in your room design."}
-          </p>
-        </div>
+          </>
+        )}
       </div>
     </div>
   );
