@@ -1,11 +1,14 @@
-'use client';
-import Image from 'next/image';
-import React, { useState } from 'react';
+"use client";
+import Image from "next/image";
+import React, { useState } from "react";
 import logo from "@/assets/white.svg";
-import { useLoading, useOutput, useImage } from '@/store/useStore';
-import { ReactCompareSlider, ReactCompareSliderImage, ReactCompareSliderHandle } from 'react-compare-slider';
-import { ScanOverlay } from './ScanOverlay'; // <-- import the overlay component
-
+import { useLoading, useOutput, useImage } from "@/store/useStore";
+import {
+  ReactCompareSlider,
+  ReactCompareSliderImage,
+  ReactCompareSliderHandle
+} from "react-compare-slider";
+import { ScanOverlay } from "./ScanOverlay"; // <-- import the overlay component
 
 const PreviewContent = () => {
   const [showOverlay, setShowOverlay] = useState(false);
@@ -18,24 +21,23 @@ const PreviewContent = () => {
   return (
     <div className="mt-8 flex flex-col items-center">
       {isLoading ? (
-        <div className={`
+        <div
+          className={`
           md:w-[500px] w-[350px] h-[200px] my-auto md:h-[300px] 
           bg-gradient-to-r from-slate-600 to-slate-700 
           rounded-lg shadow-lg 
           flex flex-col items-center justify-center 
           transition-all duration-300 ease-in-out
           ${isGenerating ? "animate-shimmer" : ""} 
-        `}>
-          <div className={`
+        `}
+        >
+          <div
+            className={`
             relative w-24 h-24 mb-4
             ${isGenerating ? "animate-bounce" : ""} 
-          `}>
-            <Image 
-              fill
-              src={logo} 
-              alt="Logo" 
-              className="object-contain"
-            />
+          `}
+          >
+            <Image fill src={logo} alt="Logo" className="object-contain" />
           </div>
           {isGenerating && (
             <div className="text-white text-center px-4">
@@ -75,7 +77,12 @@ const PreviewContent = () => {
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
                 </svg>
               </button>
             </div>
@@ -84,36 +91,38 @@ const PreviewContent = () => {
           handle={
             <ReactCompareSliderHandle
               buttonStyle={{
-                backdropFilter: 'none',
-                background: 'white',
+                backdropFilter: "none",
+                background: "white",
                 border: 0,
-                color: '#333',
-                boxShadow: '0 0 0 2px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.15)'
+                color: "#333",
+                boxShadow:
+                  "0 0 0 2px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.15)"
               }}
               linesStyle={{
                 width: 2,
-                color: '#333'
+                color: "#333"
               }}
             />
           }
           style={{
-            width: '100%',
-            height: '100%',
-            maxWidth: '800px',
-            maxHeight: '600px',
-            borderRadius: '8px',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+            width: "100%",
+            height: "100%",
+            maxWidth: "800px",
+            maxHeight: "600px",
+            borderRadius: "8px",
+            boxShadow:
+              "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
           }}
         />
       )}
-            {/* Overlay Component for scanning */}
-            <ScanOverlay
+      {/* Overlay Component for scanning */}
+      <ScanOverlay
         isOpen={showOverlay}
         onClose={() => setShowOverlay(false)}
         imageSrc={output}
       />
     </div>
   );
-}
+};
 
 export default PreviewContent;

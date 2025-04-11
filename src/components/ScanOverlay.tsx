@@ -89,15 +89,28 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
   const [scanningStage, setScanningStage] = useState<
     "initial" | "scanning" | "furniture-list" | "results"
   >("initial");
-  const [detectedFurniture, setDetectedFurniture] = useState<FurnitureWithMetadata[]>([]);
-  const [selectedFurniture, setSelectedFurniture] = useState<FurnitureWithMetadata | null>(null);
+  const [detectedFurniture, setDetectedFurniture] = useState<
+    FurnitureWithMetadata[]
+  >([]);
+  const [selectedFurniture, setSelectedFurniture] =
+    useState<FurnitureWithMetadata | null>(null);
   const [scanProgress, setScanProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [similarProducts, setSimilarProducts] = useState<any[]>([]);
-  
+
   // Add state for container dimensions and a ref for the container
-  const [containerDimensions, setContainerDimensions] = useState({ width: 512, height: 384 });
+  const [containerDimensions, setContainerDimensions] = useState({
+    width: 512,
+    height: 384
+  });
+
+  // Add default container dimensions of the image given by roboflow
+  const [imageDefaultsize, setimageDefaultsize] = useState({
+    width: 512,
+    height: 384
+  });
+
   const imageContainerRef = useRef<HTMLDivElement>(null);
 
   const output = useOutput((state: any) => state.output); // Get image
@@ -118,22 +131,30 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
 
   // Effect to update container dimensions when needed
   useEffect(() => {
-    if ((scanningStage === "furniture-list" || scanningStage === "results") && imageContainerRef.current) {
+    if (
+      (scanningStage === "furniture-list" || scanningStage === "results") &&
+      imageContainerRef.current
+    ) {
       const updateDimensions = () => {
         if (imageContainerRef.current) {
+          console.log(
+            "Updating container dimensions:",
+            imageContainerRef.current.clientWidth,
+            imageContainerRef.current.clientHeight
+          );
           setContainerDimensions({
             width: imageContainerRef.current.clientWidth,
             height: imageContainerRef.current.clientHeight
           });
         }
       };
-      
+
       // Initial update
       updateDimensions();
-      
+
       // Update on window resize
       window.addEventListener("resize", updateDimensions);
-      
+
       return () => {
         window.removeEventListener("resize", updateDimensions);
       };
@@ -150,11 +171,11 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
     setScanningStage("scanning");
     setError(null);
     setScanProgress(0);
-    
+
     try {
       // Progress animation
       const progressInterval = setInterval(() => {
-        setScanProgress(prev => {
+        setScanProgress((prev) => {
           if (prev >= 90) {
             clearInterval(progressInterval);
             return 90;
@@ -162,7 +183,7 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
           return prev + 10;
         });
       }, 500);
-      
+
       // Call Roboflow API to detect furniture
       const response = await fetch("/api/roboflow", {
         method: "POST",
@@ -174,30 +195,36 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
           roomType: room // Room type
         })
       });
-      
+
       clearInterval(progressInterval);
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to detect furniture");
       }
-      
+
       const data = await response.json();
       setScanProgress(100);
-      
+
       // Log the furniture data for debugging
       console.log("Furniture detection data:", data);
-      
+
       if (data?.furnitures && Array.isArray(data.furnitures)) {
         // Log the first furniture item to check coordinates
         if (data.furnitures.length > 0) {
           console.log("First furniture item:", data.furnitures[0]);
         }
-        
-        setDetectedFurniture(data.furnitures.map((furniture: any, index: number) => ({
-          ...furniture,
-          id: `furniture-${index}`
-        })));
+
+        setDetectedFurniture(
+          data.furnitures.map((furniture: any, index: number) => ({
+            ...furniture,
+            id: `furniture-${index}`
+          }))
+        );
+        setimageDefaultsize({
+          width: data?.image?.width,
+          height: data?.image?.height
+        });
         setScanningStage("furniture-list");
       } else {
         throw new Error("No furniture detected");
@@ -216,7 +243,7 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
     setIsLoading(true);
     setScanningStage("results");
     setError(null);
-    
+
     try {
       // Get furniture description from OpenAI
       const descResponse = await fetch("/api/openai/describe", {
@@ -229,23 +256,25 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
           base64Image: furniture.image.value
         })
       });
-      
+
       if (!descResponse.ok) {
         const errorData = await descResponse.json();
-        throw new Error(errorData.error || "Failed to get furniture description");
+        throw new Error(
+          errorData.error || "Failed to get furniture description"
+        );
       }
-      
+
       const descData = await descResponse.json();
       const description = descData.description;
-      
+
       // Update the selected furniture with description
-      setSelectedFurniture(prev => prev ? { ...prev, description } : null);
-      
+      setSelectedFurniture((prev) => (prev ? { ...prev, description } : null));
+
       // Search for similar products
       if (description) {
         // Use Serper API to find similar products
         const products = await searchWithSerper(description);
-        
+
         if (products && Array.isArray(products)) {
           setSimilarProducts(products);
         } else {
@@ -273,9 +302,10 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm transition-opacity duration-300 ease-in-out"
-      style={{ opacity: isAnimatingOut ? 0 : 1 }}>
-      
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm transition-opacity duration-300 ease-in-out"
+      style={{ opacity: isAnimatingOut ? 0 : 1 }}
+    >
       {/* Add pulse animation style */}
       <style jsx global>{`
         @keyframes pulse {
@@ -283,23 +313,23 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
             transform: scale(1);
             box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7);
           }
-          
+
           70% {
             transform: scale(1.05);
             box-shadow: 0 0 0 10px rgba(6, 182, 212, 0);
           }
-          
+
           100% {
             transform: scale(1);
             box-shadow: 0 0 0 0 rgba(6, 182, 212, 0);
           }
         }
-        
+
         .pulse-dot {
           animation: pulse 2s infinite;
         }
       `}</style>
-      
+
       {/* Modal container with the background image covering the entire modal */}
       <div
         className={`
@@ -313,35 +343,35 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
         {/* Initial stage - full image view only */}
         {scanningStage === "initial" && (
           <div className="relative w-full h-full" ref={imageContainerRef}>
-          <Image
-            src={imageSrc}
+            <Image
+              src={imageSrc}
               alt="Room Image"
-            fill
+              fill
               className="object-contain"
-            priority
+              priority
               unoptimized={true}
             />
-            
+
             {/* Close button */}
-          <button
-            type="button"
-            onClick={handleClose}
+            <button
+              type="button"
+              onClick={handleClose}
               className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all"
-            aria-label="Close"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
+              aria-label="Close"
             >
-              <path
-                fillRule="evenodd"
-                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
 
             {/* Start scanning overlay */}
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40">
@@ -353,11 +383,12 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
                 {isLoading ? "Starting..." : "Start Scanning"}
               </button>
               <p className="mt-4 text-sm text-white">
-                Scan your room design to identify furniture and find similar products
+                Scan your room design to identify furniture and find similar
+                products
               </p>
             </div>
-            </div>
-          )}
+          </div>
+        )}
 
         {/* Other stages - split view with image and sidebar */}
         {scanningStage !== "initial" && (
@@ -384,106 +415,140 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
                   />
                 </svg>
               </button>
-              
-              {/* Image container */}
-              <div 
-                ref={imageContainerRef}
-                className="relative w-full h-full"
-              >
-                <Image
-                  src={imageSrc}
-                  alt="Room Image"
-                  fill
-                  className="object-contain"
-                  priority
-                  unoptimized={true}
-                />
-                
-                {/* Scanning overlay */}
-                {scanningStage === "scanning" && (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40">
-                    <div className="w-20 h-20 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                    <p className="mt-4 text-sm text-white">
-                      {isLoading ? "Analyzing your design..." : "Scanning complete!"}
-                    </p>
-                    {/* Progress bar */}
-                    <div className="w-64 bg-gray-700 rounded-full h-1.5 mt-4">
-                      <div
-                        className="bg-blue-500 h-1.5 rounded-full transition-all duration-300 ease-out"
-                        style={{ width: `${scanProgress}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                )}
 
-                {/* Furniture dot markers - show in furniture-list stage */}
-                {scanningStage === "furniture-list" && detectedFurniture.map((item, index) => {
-                  
-                  // Get current container dimensions
-                  const containerWidth = imageContainerRef.current?.clientWidth || 500;
-                  const containerHeight = imageContainerRef.current?.clientHeight || 400;
-                  
-                  // Adjust the original dimensions to match what the API seems to be using
-                  const originalWidth = 768; 
-                  const originalHeight = 768; 
-                  
-                  // Directly use the coordinates from the API
-                  const furnitureX = item.plot.x;
-                  const furnitureY = item.plot.y;
-                  
-                  // Calculate displayed image size with proper aspect ratio preservation
-                  const containerAspectRatio = containerWidth / containerHeight;
-                  const imageAspectRatio = 1; // Using 1:1 aspect ratio based on coordinate patterns
-                  
-                  let displayedWidth, displayedHeight;
-                  if (containerAspectRatio > imageAspectRatio) {
-                    // Container is wider than image
-                    displayedHeight = containerHeight;
-                    displayedWidth = containerHeight * imageAspectRatio;
-                  } else {
-                    // Container is taller than image
-                    displayedWidth = containerWidth;
-                    displayedHeight = containerWidth / imageAspectRatio;
-                  }
-                  
-                  // Margins for centering the image in the container
-                  const marginLeft = (containerWidth - displayedWidth) / 2;
-                  const marginTop = (containerHeight - displayedHeight) / 2;
-                  
-                  // Apply scaling based on how the image is displayed
-                  const scaleFactorX = displayedWidth / originalWidth;
-                  const scaleFactorY = displayedHeight / originalHeight;
-                  
-                  // Final coordinates
-                  const dotX = (furnitureX * scaleFactorX) + marginLeft;
-                  const dotY = (furnitureY * scaleFactorY) + marginTop;
-                  
-                  // For debugging
-                  console.log(`Furniture ${index} (${item.type}): Placing dot at ${Math.round(dotX)},${Math.round(dotY)}`);
-                  
-                  return (
-                    <div
-                      key={item.id}
-                      className="absolute cursor-pointer group z-20"
-                      style={{
-                        left: `${dotX}px`,
-                        top: `${dotY}px`,
-                        transform: 'translate(-50%, -50%)'
-                      }}
-                      onClick={() => handleFurnitureSelect(item)}
-                    >
-                      <div className="w-8 h-8 flex items-center justify-center">
-                        <div className="w-6 h-6 rounded-full bg-cyan-500 border-2 border-white shadow-lg hover:w-7 hover:h-7 transition-all duration-200 pulse-dot"></div>
-                      </div>
-                      <div className="absolute -top-8 left-0 bg-blue-600 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                        {item.type} ({item.confidence}%)
+              {/* Image container */}
+              <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+                <div
+                  ref={imageContainerRef}
+                  className="relative max-w-full max-h-full"
+                >
+                  <img
+                    src={imageSrc}
+                    className={`${
+                      imageDefaultsize.width > imageDefaultsize.height
+                        ? "w-full"
+                        : "h-full"
+                    } `}
+                    alt="Room Image"
+                  />
+
+                  {/* Scanning overlay */}
+                  {scanningStage === "scanning" && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40">
+                      <div className="w-20 h-20 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                      <p className="mt-4 text-sm text-white">
+                        {isLoading
+                          ? "Analyzing your design..."
+                          : "Scanning complete!"}
+                      </p>
+                      {/* Progress bar */}
+                      <div className="w-64 bg-gray-700 rounded-full h-1.5 mt-4">
+                        <div
+                          className="bg-blue-500 h-1.5 rounded-full transition-all duration-300 ease-out"
+                          style={{ width: `${scanProgress}%` }}
+                        ></div>
                       </div>
                     </div>
-                  );
-                })}
+                  )}
+
+                  {/* Furniture dot markers - show in furniture-list stage */}
+                  {scanningStage === "furniture-list" &&
+                    detectedFurniture.map((item, index) => {
+                      // Get current container dimensions
+                      const containerWidth =
+                        imageContainerRef.current?.clientWidth || 500;
+                      const containerHeight =
+                        imageContainerRef.current?.clientHeight || 400;
+
+                      // Adjust the original dimensions to match what the API seems to be using
+                      const originalWidth = 768;
+                      const originalHeight = 768;
+
+                      // Directly use the coordinates from the API
+                      const furnitureX = item.plot.x;
+                      const furnitureY = item.plot.y;
+
+                      // Calculate displayed image size with proper aspect ratio preservation
+                      const containerAspectRatio =
+                        containerWidth / containerHeight;
+                      const imageAspectRatio =
+                        imageDefaultsize.width / imageDefaultsize.height; // Using 1:1 aspect ratio based on coordinate patterns
+
+                      let displayedWidth, displayedHeight;
+                      if (containerAspectRatio > imageAspectRatio) {
+                        // Container is wider than image
+                        displayedHeight = containerHeight;
+                        displayedWidth = containerHeight * imageAspectRatio;
+                      } else {
+                        // Container is taller than image
+                        displayedWidth = containerWidth;
+                        displayedHeight = containerWidth / imageAspectRatio;
+                      }
+
+                      // Margins for centering the image in the container
+                      const marginLeft = (containerWidth - displayedWidth) / 2;
+                      const marginTop = (containerHeight - displayedHeight) / 2;
+
+                      // Apply scaling based on how the image is displayed
+                      const scaleFactorX =
+                        displayedWidth / imageDefaultsize.width;
+                      const scaleFactorY =
+                        displayedHeight / imageDefaultsize.height;
+
+                      // console.log(
+                      //   "Scale factors:",
+                      //   scaleFactorX,
+                      //   scaleFactorY,
+                      //   "\nMargins:",
+                      //   marginLeft,
+                      //   marginTop,
+                      //   "\nContainer dimensions:",
+                      //   containerWidth,
+                      //   containerHeight,
+                      //   "\nImage default size:",
+                      //   imageDefaultsize.width,
+                      //   imageDefaultsize.height,
+                      //   "\nFurniture coordinates:",
+                      //   containerHeight - imageDefaultsize.height
+                      // );
+
+                      // Final coordinates
+                      const dotX = furnitureX * scaleFactorX + marginLeft;
+                      const dotY = furnitureY * scaleFactorY + marginTop;
+
+                      // For debugging
+                      console.log(
+                        `Furniture ${index} (${
+                          item.type
+                        }): Placing dot at ${Math.round(dotX)},${Math.round(
+                          dotY
+                        )}`
+                      );
+
+                      return (
+                        <div
+                          key={item.id}
+                          className="absolute cursor-pointer group z-20"
+                          style={{
+                            left: `${dotX}px`,
+                            top: `${dotY}px`,
+                            transform: "translate(-50%, -50%)"
+                          }}
+                          onClick={() => handleFurnitureSelect(item)}
+                        >
+                          <div className="w-8 h-8 flex items-center justify-center">
+                            <div className="w-6 h-6 rounded-full bg-orange-500 border-2 border-white shadow-lg hover:w-7 hover:h-7 transition-all duration-200 pulse-dot"></div>
+                          </div>
+                          <div className="absolute -top-8 left-0 bg-orange-500 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                            {item.type} ({item.confidence}%)
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
               </div>
             </div>
-            
+
             {/* Right panel - Product results */}
             <div className="w-full md:w-2/5 h-full bg-white dark:bg-gray-900 overflow-y-auto">
               {/* Header */}
@@ -491,29 +556,45 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                   {scanningStage === "scanning" && "Scanning..."}
                   {scanningStage === "furniture-list" && "Detected Furniture"}
-                  {scanningStage === "results" && selectedFurniture && 
-                    `${selectedFurniture.type.charAt(0).toUpperCase() + selectedFurniture.type.slice(1)} Products`}
+                  {scanningStage === "results" &&
+                    selectedFurniture &&
+                    `${
+                      selectedFurniture.type.charAt(0).toUpperCase() +
+                      selectedFurniture.type.slice(1)
+                    } Products`}
                 </h2>
-                
+
                 {scanningStage === "results" && selectedFurniture && (
-                  <button 
+                  <button
                     onClick={goBackToFurnitureList}
                     className="mt-2 text-sm text-blue-600 hover:text-blue-800 flex items-center"
                   >
-                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    <svg
+                      className="w-4 h-4 mr-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                      />
                     </svg>
                     Back to all furniture
                   </button>
                 )}
-                
-                {selectedFurniture?.description && scanningStage === "results" && (
-                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                    {selectedFurniture.description}
-                </p>
-              )}
+
+                {/* {selectedFurniture?.description &&
+                  scanningStage === "results" && (
+                    <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                      {selectedFurniture.description}
+                    </p>
+                  )} */}
               </div>
-              
+
               {/* Content */}
               <div className="p-4">
                 {error && (
@@ -521,7 +602,7 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
                     {error}
                   </div>
                 )}
-                
+
                 {scanningStage === "scanning" && (
                   <div className="text-center py-8">
                     <p className="text-gray-600 dark:text-gray-300">
@@ -529,7 +610,7 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
                     </p>
                   </div>
                 )}
-                
+
                 {scanningStage === "furniture-list" && (
                   <div className="grid grid-cols-2 gap-3">
                     {detectedFurniture.map((item) => (
@@ -550,7 +631,9 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
                         )}
                         <div className="p-2">
                           <div className="flex items-center justify-between">
-                            <span className="font-medium capitalize text-gray-900 dark:text-white">{item.type}</span>
+                            <span className="font-medium capitalize text-gray-900 dark:text-white">
+                              {item.type}
+                            </span>
                             <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 px-2 py-1 rounded-full">
                               {item.confidence}%
                             </span>
@@ -560,7 +643,7 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
                     ))}
                   </div>
                 )}
-                
+
                 {scanningStage === "results" && (
                   <>
                     {isLoading ? (
@@ -569,15 +652,24 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
                       </div>
                     ) : (
                       <div className="grid grid-cols-2 gap-3">
-                        {(similarProducts.length > 0 ? similarProducts : mockProducts).map((product, index) => (
+                        {(similarProducts.length > 0
+                          ? similarProducts
+                          : mockProducts
+                        ).map((product, index) => (
                           <div
                             key={product.id || `product-${index}`}
                             className="bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition-all"
-                            onClick={() => openProductUrl(product.url || product.link)}
+                            onClick={() =>
+                              openProductUrl(product.url || product.link)
+                            }
                           >
                             <div className="relative h-32 w-full">
                               <img
-                                src={product.imageUrl || product.thumbnail || "https://via.placeholder.com/100"}
+                                src={
+                                  product.imageUrl ||
+                                  product.thumbnail ||
+                                  "https://via.placeholder.com/100"
+                                }
                                 alt={product.name || product.title || "Product"}
                                 className="w-full h-full object-cover"
                                 loading="lazy"
@@ -585,7 +677,9 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
                             </div>
                             <div className="p-2">
                               <h4 className="font-medium text-gray-900 dark:text-white text-sm line-clamp-1">
-                                {product.name || product.title || "Product Name"}
+                                {product.name ||
+                                  product.title ||
+                                  "Product Name"}
                               </h4>
                               <p className="text-blue-600 dark:text-blue-400 font-bold text-sm">
                                 {product.price || product.price_str || "$???"}
@@ -604,17 +698,18 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
                     )}
                   </>
                 )}
-                
-                {scanningStage === "furniture-list" || scanningStage === "results" ? (
-                <button
-                  onClick={startScanning}
+
+                {scanningStage === "furniture-list" ||
+                scanningStage === "results" ? (
+                  <button
+                    onClick={startScanning}
                     className="mt-6 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors w-full"
                     disabled={isLoading}
-                >
-                  Scan Again
-                </button>
+                  >
+                    Scan Again
+                  </button>
                 ) : null}
-            </div>
+              </div>
             </div>
           </>
         )}
