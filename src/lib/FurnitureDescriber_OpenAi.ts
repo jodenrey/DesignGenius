@@ -11,7 +11,7 @@ function initOpenAI(): OpenAI {
     }
   
 // Main image description function
-export default async function describeImage(type:string, base64Image: string): Promise<string | null> {
+export default async function describeImage(type:string, base64Image: string, roomType:string): Promise<string | null> {
       const openai = initOpenAI();
       
     const response =  await openai.chat.completions.create({
@@ -21,7 +21,7 @@ export default async function describeImage(type:string, base64Image: string): P
             content: [
                 {
                 type: "text",
-                text: `You're a professional interior design assistant. Describe only the "${type.toUpperCase()}" in the image in extreme detail — including its furniture type, color, shape, design style, material, texture, and possible use-case. Return your response strictly in valid JSON format with this key only: { "description": "..." } Do not include any explanation, markdown, or extra text. Only return the JSON.`,
+                text: `You're a professional interior design assistant. Describe only the "${type.toUpperCase()}" used in ${roomType.toLocaleUpperCase()} in the image in extreme detail — including its furniture type, color, shape, design style, material, texture, and possible use-case. Return your response strictly in valid JSON format with this key only: { "description": "..." } Do not include any explanation, markdown, or extra text. Only return the JSON.`,
                 },
                 {
                 type: "image_url",

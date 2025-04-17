@@ -253,7 +253,8 @@ export const ScanOverlay: React.FC<ScanOverlayProps> = ({
         },
         body: JSON.stringify({
           type: furniture.type,
-          base64Image: furniture.image.value
+          base64Image: furniture.image.value,
+          roomType: room
         })
       });
 
