@@ -45,7 +45,7 @@ const PreviewContent = () => {
                 Generating...
               </p>
               <p className="text-sm opacity-80 animate-fade-in-delay">
-                This may take up to 45 seconds. Thank you for your patience!
+                This may take up to 45 seconds. On the 1st-2nd try it might failed because the model is still cold and vercel only handle up to 1min. But after that it is fine. Thank you for your patience!
               </p>
             </div>
           )}
