@@ -177,7 +177,7 @@ const AboutPage = () => {
               <p className="text-sm text-orange-500 mb-2">| DesignGenius</p>
               <h2 className="font-bold text-4xl text-white mb-6">About the Developers</h2>
               <p className="text-lg leading-7 text-white">
-                We are Bachelor of Science in Computer Science students from STI, and DesignGenius represents the culmination of our thesis work. DesignGenius is an AI-powered platform created to assist users in transforming their interior spaces with ease and efficiency. Our website offers a range of AI-driven design solutions, from personalized room layouts to 3D visualizations, catering to homeowners, interior designers, and enthusiasts alike. Through this project, we have combined our passion for technology and design to create a user-friendly tool that makes the design process more accessible and innovative.
+                We are Bachelor of Science in Computer Science students from STI College San Jose Del Monte. DesignGenius is an AI-powered platform created to assist users in transforming their interior spaces with ease and efficiency. Our website offers a range of AI-driven design solutions, from personalized room layouts to 3D visualizations, catering to homeowners, interior designers, and enthusiasts alike. Through this project, we have combined our passion for technology and design to create a user-friendly tool that makes the design process more accessible and innovative.
               </p>
             </div>
           </section>
